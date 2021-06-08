@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+
+    <table>
+      <tr>
+        <th>Informe</th>
+      </tr>
+      <tr>
+        {% for ciclo in ciclos.items %}
+        <td>
+             <a class="mr-2" href="#">
+               {{ ciclo.date_created.strftime('%Y-%m-%d') }}
+             </a>
+        </td>
+        {% endfor %}
+      </tr>
+
+    </table>
+
+
+
+    <br>
+
+    {% for page_num in ciclos.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if ciclos.page == page_num %}
+          <a class="btn btn-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+        {% else %}
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+        {% endif %}
+      {% else %}
+        ...
+      {% endif %}
+    {% endfor %}
+{% endblock content %}
