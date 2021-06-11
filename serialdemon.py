@@ -15,7 +15,7 @@ class States(Enum):
 
 
 def init_serial():
-    return serial.Serial('/dev/ttyACM0')
+    return serial.Serial('/dev/ttyAMA0')
 
 def read_serial(serial_device):
     tdata = serial_device.read()           # Wait forever for anything
