@@ -24,6 +24,14 @@ class Ciclo(db.Model):
     path = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     state = db.Column(db.Integer, nullable=False)
+    logs = db.relationship('Log', backref='log', lazy=True)
+
+
+class Log(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(45), nullable=False)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    ciclo_id = db.Column(db.Integer, db.ForeignKey('ciclo.id'), nullable=False)
 
     def __repr__(self):
         return f"Ciclo('{self.path}', '{self.date_posted}')"
