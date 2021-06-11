@@ -1,8 +1,3 @@
-#ser = serial.Serial('/dev/ttyACM0')  # open serial port
-#print(ser.name)         # check which port was really used
-#ser.write(b'hello')     # write a string
-#ser.close()
-
 from enum import Enum, auto
 import os
 import serial
@@ -18,9 +13,9 @@ def init_serial():
     return serial.Serial('/dev/ttyAMA0')
 
 def read_serial(serial_device):
-    tdata = serial_device.read()           # Wait forever for anything
-    time.sleep(1)              # Sleep (or inWaiting() doesn't give the correct value)
-    data_left = serial_device.inWaiting()  # Get the number of characters ready to be read
+    tdata = serial_device.read()
+    time.sleep(1)
+    data_left = serial_device.inWaiting()  
     tdata += serial_device.read(data_left)
     print(tdata)
 
