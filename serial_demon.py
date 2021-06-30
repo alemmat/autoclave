@@ -7,8 +7,6 @@ import time
 
 class AutoClave:
 
-	serial_device = None
-
 	class States(Enum):
 	    start_cycle = auto()
 	    save_data_cycle = auto()
@@ -17,13 +15,13 @@ class AutoClave:
 	    write_log = auto()
 
 	def __init__(self):
-		serial_device = serial.Serial('/dev/ttyAMA0')
+		self.serial_device = serial.Serial('/dev/ttyAMA0')
 
 	def read_serial(self):
-	    data = serial_device.read()
+	    data = self.serial_device.read()
 	    time.sleep(10)
-	    data_left = serial_device.inWaiting()
-	    data += serial_device.read(data_left)
+	    data_left = self.serial_device.inWaiting()
+	    data += self.serial_device.read(data_left)
 	    print(data)
 
 	def write_file(log):
