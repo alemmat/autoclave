@@ -6,6 +6,62 @@ from datetime import datetime
 import time
 
 
+
+class AutoClave
+
+	def state_machine(state, serial_data):
+
+	    index = 0
+
+	    while len(serial_data) > 0:
+
+	        if state == States.start_cycle:
+
+	            if serial_data[index] == 0xF1:
+	                serial_data.pop(index)
+	                create_file()
+	                state = States.save_data_cycle
+
+	            if serial_data[index] == 0xF4:
+	                state = States.audit
+
+	            if serial_data[index] == 0xF8:
+	                state = States.set_time
+
+	        if state == States.save_data_cycle:
+
+	            if serial_data[index] == 0xF2:
+	                serial_data.pop(index)
+	                os.remove("temp.txt")
+	                state = States.start_cycle
+
+	            if len(serial_data) > 0:
+	                if serial_data[index] == 0xF3:
+	                    serial_data.pop(index)
+	                    state = States.write_log
+
+	        if state == States.write_log:
+
+	            log+=chr(serial_data[index])
+
+	            if serial_data[index] == 0x0D:
+	                print(log)
+	                write_file(log)
+	                state = States.save_data_cycle
+	                log=""
+
+	            serial_data.pop(index)
+
+	        if state == States.audit:
+	            state = States.start_cycle
+
+	        if state == States.set_time:
+	            state = States.start_cycle
+
+	    return state
+
+
+
 class States(Enum):
     start_cycle = auto()
     save_data_cycle = auto()
