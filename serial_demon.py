@@ -5,15 +5,9 @@ from fpdf import FPDF
 from datetime import datetime
 import time
 
-
-
 class AutoClave:
 
 	serial_device = None
-
-	def __init__(self):
-		serial_device = serial.Serial('/dev/ttyAMA0')
-
 
 	class States(Enum):
 	    start_cycle = auto()
@@ -22,13 +16,15 @@ class AutoClave:
 	    set_time = auto()
 	    write_log = auto()
 
-	def read_serial():
+	def __init__(self):
+		serial_device = serial.Serial('/dev/ttyAMA0')
+
+	def read_serial(self):
 	    data = serial_device.read()
 	    time.sleep(10)
 	    data_left = serial_device.inWaiting()
 	    data += serial_device.read(data_left)
 	    print(data)
-
 
 	def write_file(log):
 
