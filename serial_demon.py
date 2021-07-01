@@ -5,6 +5,7 @@ from fpdf import FPDF
 from datetime import datetime
 import time
 
+
 class States(Enum):
     start_cycle = auto()
     save_data_cycle = auto()
@@ -12,95 +13,94 @@ class States(Enum):
     set_time = auto()
     write_log = auto()
 
+
 class AutoClave:
 
+    def __init__(self):
+        self.serial_device = serial.Serial('/dev/ttyAMA0')
+        self.line = ""
 
-	def __init__(self):
-		self.serial_device = serial.Serial('/dev/ttyAMA0')
-		self.line = ""
-
-	def read_serial(self):
-	    data = self.serial_device.read()
-	    time.sleep(10)
-	    data_left = self.serial_device.inWaiting()
-	    data += self.serial_device.read(data_left)
+    def read_serial(self):
+        data = self.serial_device.read()
+        time.sleep(10)
+        data_left = self.serial_device.inWaiting()
+        data += self.serial_device.read(data_left)
         print(data)
-	    return data
+        return data
 
-	def write_file(self,log):
+    def write_file(self, log):
 
-	    f = open("temp.txt", "a")
-	    f.write(log)
-	    f.close()
+        f = open("temp.txt", "a")
+        f.write(log)
+        f.close()
 
-	    pdf = FPDF()
-	    pdf.add_page()
-	    pdf.set_font("Arial", size = 10)
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size=10)
 
-	    f = open("temp.txt", "r")
+        f = open("temp.txt", "r")
 
-	    for x in f:
-	        pdf.cell(200, 5, txt = x, ln = 1, align = 'C')
+        for x in f:
+            pdf.cell(200, 5, txt=x, ln=1, align='C')
 
-	    pdf.output(datetime.utcnow().strftime('%B %d %Y - %H:%M:%S'))
+        pdf.output(datetime.utcnow().strftime('%B %d %Y - %H:%M:%S'))
 
-	def create_file(self):
-	    f = open("temp.txt", "x")
-	    f.close()
+    def create_file(self):
+        f = open("temp.txt", "x")
+        f.close()
 
-	def state_machine(self, state):
+    def state_machine(self, state):
 
-		serial_data = self.read_serial()
-		index = 0
+        serial_data = self.read_serial()
+        index = 0
 
-		while len(serial_data) > index:
+        while len(serial_data) > 0:
 
-			if state == States.start_cycle:
+            if state == States.start_cycle:
 
-				if serial_data[index] == 0xF1:
-					create_file()
-					state = States.save_data_cycle
+                if serial_data[index] == 0xF1:
+                    create_file()
+                    state = States.save_data_cycle
 
-				if serial_data[index] == 0xF4:
-					state = States.audit
+                if serial_data[index] == 0xF4:
+                    state = States.audit
 
-				if serial_data[index] == 0xF8:
-					state = States.set_time
+                if serial_data[index] == 0xF8:
+                    state = States.set_time
 
-			if state == States.save_data_cycle:
+            if state == States.save_data_cycle:
 
-				if serial_data[index] == 0xF2:
-					os.remove("temp.txt")
-					state = States.start_cycle
+                if serial_data[index] == 0xF2:
+                    os.remove("temp.txt")
+                    state = States.start_cycle
 
-				if len(serial_data) > 0:
-					if serial_data[index] == 0xF3:
-						state = States.write_log
+                if len(serial_data) > 0:
+                    if serial_data[index] == 0xF3:
+                        state = States.write_log
 
-			if state == States.write_log:
+            if state == States.write_log:
+                self.line += chr(serial_data[index])
+                if serial_data[index] == 0x0D:
+                    print(self.line)
+                    write_file(self.line)
+                    state = States.save_data_cycle
+                    self.line = ""
 
-				self.line+=chr(serial_data[index])
+            if state == States.audit:
+                state = States.start_cycle
 
-				if serial_data[index] == 0x0D:
-					print(self.line)
-					write_file(self.line)
-					state = States.save_data_cycle
-					self.line = ""
-
-			if state == States.audit:
-				state = States.start_cycle
-
-			if state == States.set_time:
-				state = States.start_cycle
+            if state == States.set_time:
+                state = States.start_cycle
 
         index++
+        
+        return state
 
-		return state
 
 def run_machine():
 
-	autoclave = AutoClave()
-	autoclave.state_machine(States.start_cycle)
+    autoclave = AutoClave()
+    autoclave.state_machine(States.start_cycle)
 
 
 if __name__ == '__main__':
