@@ -59,7 +59,7 @@ class AutoClave:
             if state == States.start_cycle:
 
                 if serial_data[index] == 0xF1:
-                    create_file()
+                    self.create_file()
                     state = States.save_data_cycle
 
                 if serial_data[index] == 0xF4:
@@ -79,10 +79,11 @@ class AutoClave:
                         state = States.write_log
 
             if state == States.write_log:
+                
                 self.line += chr(serial_data[index])
                 if serial_data[index] == 0x0D:
                     print(self.line)
-                    write_file(self.line)
+                    self.write_file(self.line)
                     state = States.save_data_cycle
                     self.line = ""
 
@@ -93,7 +94,7 @@ class AutoClave:
                 state = States.start_cycle
 
         index = index + 1
-        
+
         return state
 
 
