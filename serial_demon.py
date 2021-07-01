@@ -16,13 +16,14 @@ class AutoClave:
 
 	def __init__(self):
 		self.serial_device = serial.Serial('/dev/ttyAMA0')
+		self.line = ""
 
 	def read_serial(self):
 	    data = self.serial_device.read()
 	    time.sleep(10)
 	    data_left = self.serial_device.inWaiting()
 	    data += self.serial_device.read(data_left)
-	    print(data)
+	    return data
 
 	def write_file(log):
 
@@ -45,9 +46,10 @@ class AutoClave:
 	    f = open("temp.txt", "x")
 	    f.close()
 
-	def state_machine(state, serial_data):
+	def state_machine(state):
 
 	    index = 0
+		serial_data = read_serial()
 
 	    while len(serial_data) > 0:
 
@@ -78,13 +80,13 @@ class AutoClave:
 
 	        if state == States.write_log:
 
-	            log+=chr(serial_data[index])
+	            self.line+=chr(serial_data[index])
 
 	            if serial_data[index] == 0x0D:
-	                print(log)
-	                write_file(log)
+	                print(self.line)
+	                write_file(self.line)
 	                state = States.save_data_cycle
-	                log=""
+	                self.line = ""
 
 	            serial_data.pop(index)
 
@@ -99,7 +101,7 @@ class AutoClave:
 def run_machine():
 
 	autoclave = AutoClave()
-	autoclave.read_serial()
+	autoclave.state_machine(States.start_cycle)
 
 
 if __name__ == '__main__':
