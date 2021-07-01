@@ -5,14 +5,15 @@ from fpdf import FPDF
 from datetime import datetime
 import time
 
+class States(Enum):
+    start_cycle = auto()
+    save_data_cycle = auto()
+    audit = auto()
+    set_time = auto()
+    write_log = auto()
+
 class AutoClave:
 
-	class States(Enum):
-	    start_cycle = auto()
-	    save_data_cycle = auto()
-	    audit = auto()
-	    set_time = auto()
-	    write_log = auto()
 
 	def __init__(self):
 		self.serial_device = serial.Serial('/dev/ttyAMA0')
