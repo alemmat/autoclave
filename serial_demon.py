@@ -22,10 +22,10 @@ class AutoClave:
 
     def read_serial(self):
         data = self.serial_device.read()
-        time.sleep(10)
+        time.sleep(2)
         data_left = self.serial_device.inWaiting()
         data += self.serial_device.read(data_left)
-        print(data)
+        print(len(data))
         return data
 
     def write_file(self, log):
