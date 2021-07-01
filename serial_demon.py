@@ -53,12 +53,11 @@ class AutoClave:
 		serial_data = self.read_serial()
 		index = 0
 
-		while len(serial_data) > 0:
+		while len(serial_data) > index:
 
 			if state == States.start_cycle:
 
 				if serial_data[index] == 0xF1:
-					serial_data.pop(index)
 					create_file()
 					state = States.save_data_cycle
 
@@ -71,13 +70,11 @@ class AutoClave:
 			if state == States.save_data_cycle:
 
 				if serial_data[index] == 0xF2:
-					serial_data.pop(index)
 					os.remove("temp.txt")
 					state = States.start_cycle
 
 				if len(serial_data) > 0:
 					if serial_data[index] == 0xF3:
-						serial_data.pop(index)
 						state = States.write_log
 
 			if state == States.write_log:
@@ -90,13 +87,13 @@ class AutoClave:
 					state = States.save_data_cycle
 					self.line = ""
 
-				serial_data.pop(index)
-
 			if state == States.audit:
 				state = States.start_cycle
 
 			if state == States.set_time:
 				state = States.start_cycle
+
+        index++
 
 		return state
 
