@@ -92,7 +92,7 @@ class AutoClave:
             if state == States.set_time:
                 state = States.start_cycle
 
-        index++
+        index = index + 1
         
         return state
 
