@@ -26,7 +26,7 @@ class AutoClave:
 	    data += self.serial_device.read(data_left)
 	    return data
 
-	def write_file(log):
+	def write_file(self,log):
 
 	    f = open("temp.txt", "a")
 	    f.write(log)
@@ -43,11 +43,11 @@ class AutoClave:
 
 	    pdf.output(datetime.utcnow().strftime('%B %d %Y - %H:%M:%S'))
 
-	def create_file():
+	def create_file(self):
 	    f = open("temp.txt", "x")
 	    f.close()
 
-	def state_machine(state):
+	def state_machine(self, state):
 
 		serial_data = read_serial()
 		index = 0
