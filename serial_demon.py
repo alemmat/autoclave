@@ -66,10 +66,6 @@ class AutoClave:
             if state == States.start_cycle:
 
                 if serial_data[index] == 0xF1:
-
-                    if os.path.isfile("temp.txt"):
-                        os.remove("temp.txt")
-
                     self.create_file()
                     state = States.save_data_cycle
 
@@ -82,7 +78,7 @@ class AutoClave:
             if state == States.save_data_cycle:
 
                 if serial_data[index] == 0xF2:
-                    os.remove("temp.txt")
+                    self.delete_file()
                     state = States.start_cycle
 
                 if len(serial_data) > 0:
@@ -93,8 +89,6 @@ class AutoClave:
                 
                 self.line += chr(serial_data[index])
                 if serial_data[index] == 0x0D:
-                    print(self.line)
-                    self.write_file(self.line)
                     state = States.save_data_cycle
                     self.line = ""
 
