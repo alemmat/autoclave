@@ -28,26 +28,24 @@ class AutoClave:
         print(len(data))
         return data
 
-    def write_file(self, log):
-
+    def write_temp_file(self):
         f = open("temp.txt", "a")
-        f.write(log)
+        f.write(self.line)
         f.close()
+        self.line = ""
 
+    def write_write_pdf(self, log):
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font("Arial", size=10)
-
         f = open("temp.txt", "r")
-
         for x in f:
             pdf.cell(200, 5, txt=x, ln=1, align='C')
-
         pdf.output(datetime.utcnow().strftime('%B %d %Y - %H:%M:%S')+".pdf")
 
     def create_file(self):
 
-        self.delete_file()
+        #self.delete_file()
         f = open("temp.txt", "x")
         f.close()
 
@@ -78,7 +76,7 @@ class AutoClave:
             if state == States.save_data_cycle:
 
                 if serial_data[index] == 0xF2:
-                    self.delete_file()
+                    #self.delete_file()
                     state = States.start_cycle
 
                 if len(serial_data) > 0:
@@ -86,11 +84,11 @@ class AutoClave:
                         state = States.write_log
 
             if state == States.write_log:
-                
+
                 self.line += chr(serial_data[index])
                 if serial_data[index] == 0x0D:
+                    self.write_temp_file()
                     state = States.save_data_cycle
-                    self.line = ""
 
             if state == States.audit:
                 state = States.start_cycle
