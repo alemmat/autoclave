@@ -45,11 +45,11 @@ class AutoClave:
 
     def create_file(self):
 
-        #self.delete_file()
+        self.delete_temp_file()
         f = open("temp.txt", "x")
         f.close()
 
-    def delete_file(self):
+    def delete_temp_file(self):
 
         if os.path.isfile("temp.txt"):
             os.remove("temp.txt")
@@ -60,6 +60,13 @@ class AutoClave:
         index = 0
 
         while len(serial_data) > index:
+
+            if state == States.write_log:
+
+                self.line += chr(serial_data[index])
+                if serial_data[index] == 0x0D:
+                    self.write_temp_file()
+                    state = States.save_data_cycle
 
             if state == States.start_cycle:
 
@@ -77,19 +84,12 @@ class AutoClave:
 
                 if serial_data[index] == 0xF2:
                     self.write_pdf()
-                    #self.delete_file()
+                    self.delete_temp_file()
                     state = States.start_cycle
 
                 if len(serial_data) > 0:
                     if serial_data[index] == 0xF3:
                         state = States.write_log
-
-            if state == States.write_log:
-
-                self.line += chr(serial_data[index])
-                if serial_data[index] == 0x0D:
-                    self.write_temp_file()
-                    state = States.save_data_cycle
 
             if state == States.audit:
                 state = States.start_cycle
