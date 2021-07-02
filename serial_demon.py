@@ -22,7 +22,7 @@ class AutoClave:
 
     def read_serial(self):
         data = self.serial_device.read()
-        time.sleep(2)
+        time.sleep(1)
         data_left = self.serial_device.inWaiting()
         data += self.serial_device.read(data_left)
         print(len(data))
@@ -34,7 +34,7 @@ class AutoClave:
         f.close()
         self.line = ""
 
-    def write_write_pdf(self, log):
+    def write_pdf(self):
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font("Arial", size=10)
@@ -76,6 +76,7 @@ class AutoClave:
             if state == States.save_data_cycle:
 
                 if serial_data[index] == 0xF2:
+                    self.write_pdf()
                     #self.delete_file()
                     state = States.start_cycle
 
