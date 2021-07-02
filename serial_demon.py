@@ -43,22 +43,33 @@ class AutoClave:
         for x in f:
             pdf.cell(200, 5, txt=x, ln=1, align='C')
 
-        pdf.output(datetime.utcnow().strftime('%B %d %Y - %H:%M:%S'))
+        pdf.output(datetime.utcnow().strftime('%B %d %Y - %H:%M:%S')+".pdf")
 
     def create_file(self):
+
+        self.delete_file()
         f = open("temp.txt", "x")
         f.close()
+
+    def delete_file(self):
+
+        if os.path.isfile("temp.txt"):
+            os.remove("temp.txt")
 
     def state_machine(self, state):
 
         serial_data = self.read_serial()
         index = 0
 
-        while len(serial_data) > 0:
+        while len(serial_data) > index:
 
             if state == States.start_cycle:
 
                 if serial_data[index] == 0xF1:
+
+                    if os.path.isfile("temp.txt"):
+                        os.remove("temp.txt")
+
                     self.create_file()
                     state = States.save_data_cycle
 
@@ -93,7 +104,7 @@ class AutoClave:
             if state == States.set_time:
                 state = States.start_cycle
 
-        index = index + 1
+            index = index + 1
 
         return state
 
