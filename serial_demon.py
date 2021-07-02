@@ -99,6 +99,9 @@ class AutoClave:
 
             index = index + 1
 
+        print(len(serial_data))
+        print(index)
+
         return state
 
 
