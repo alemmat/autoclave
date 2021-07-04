@@ -41,6 +41,7 @@ class AutoClave:
         pdf.set_font("Arial", size=10)
         f = open("temp.txt", "r")
         for x in f:
+            pdf.set_left_margin(0)
             pdf.cell(200, 5, txt=x, ln=1, align='C')
         pdf.output(datetime.utcnow().strftime('%B %d %Y - %H:%M:%S')+".pdf")
 
