@@ -37,6 +37,7 @@ class AutoClave:
     def write_pdf(self):
         pdf = FPDF()
         pdf.add_page()
+        pdf.set_left_margin(0)
         pdf.set_font("Arial", size=10)
         f = open("temp.txt", "r")
         for x in f:
