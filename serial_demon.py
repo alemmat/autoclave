@@ -37,12 +37,12 @@ class AutoClave:
     def write_pdf(self):
         pdf = FPDF()
         pdf.add_page()
-        pdf.set_font("Arial", size=10)
+        pdf.set_font("Arial", size=5)
         f = open("temp.txt", "r")
 
         for x in f:
-            pdf.cell(200, 5, txt=x, ln=1, align='l')
-        
+            pdf.cell(100,50, txt=x, ln=1, align='l')
+
         pdf.output(datetime.utcnow().strftime('%B %d %Y - %H:%M:%S')+".pdf")
 
     def create_file(self):
