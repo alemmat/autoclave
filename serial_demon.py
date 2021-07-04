@@ -25,7 +25,7 @@ class AutoClave:
         time.sleep(1)
         data_left = self.serial_device.inWaiting()
         data += self.serial_device.read(data_left)
-        print(len(data))
+        print(data)
         return data
 
     def write_temp_file(self):
