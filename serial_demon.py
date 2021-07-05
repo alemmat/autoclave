@@ -41,7 +41,7 @@ class AutoClave:
         f = open("temp.txt", "r")
 
         for x in f:
-            pdf.cell( 10, 1, txt=x, ln=1, align='l')
+            pdf.cell( 10, 10, txt=x, ln=1, align='l')
 
         pdf.output(datetime.utcnow().strftime('%B %d %Y - %H:%M:%S')+".pdf")
 
