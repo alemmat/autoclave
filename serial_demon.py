@@ -17,25 +17,28 @@ class States(Enum):
 class AutoClave:
 
     def __init__(self):
+
         self.serial_device = serial.Serial('/dev/ttyAMA0')
         self.state = States.start_cycle
         self.line = ""
 
     def read_serial(self):
+
         data = self.serial_device.read()
         time.sleep(1)
         data_left = self.serial_device.inWaiting()
         data += self.serial_device.read(data_left)
-
         return data
 
     def write_temp_file(self):
+
         f = open("temp.txt", "a")
         f.write(self.line)
         f.close()
         self.line = ""
 
     def write_pdf(self):
+
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font("Arial", size=10)
@@ -70,40 +73,44 @@ class AutoClave:
 
                     self.line += chr(serial_data[index])
 
-                    print(self.line)
-
                     if serial_data[index] == 0x0D:
-                        print(self.line)
+
                         self.write_temp_file()
                         self.state = States.save_data_cycle
 
                 if self.state == States.start_cycle:
 
                     if serial_data[index] == 0xF1:
+
                         self.create_file()
                         self.state = States.save_data_cycle
 
                     if serial_data[index] == 0xF4:
+
                         self.state = States.audit
 
                     if serial_data[index] == 0xF8:
+
                         self.state = States.set_time
 
                 if self.state == States.save_data_cycle:
 
                     if serial_data[index] == 0xF2:
+
                         self.write_pdf()
                         self.delete_temp_file()
                         self.state = States.start_cycle
 
-                    if len(serial_data) > 0:
-                        if serial_data[index] == 0xF3:
-                            self.state = States.write_log
+                    if serial_data[index] == 0xF3:
+
+                        self.state = States.write_log
 
                 if self.state == States.audit:
+
                     self.state = States.start_cycle
 
                 if self.state == States.set_time:
+                    
                     self.state = States.start_cycle
 
                 index = index + 1
