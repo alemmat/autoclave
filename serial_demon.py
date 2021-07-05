@@ -60,8 +60,6 @@ class AutoClave:
 
     def state_machine(self):
 
-
-
         while True:
 
             serial_data = self.read_serial()
