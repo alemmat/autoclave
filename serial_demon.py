@@ -67,8 +67,9 @@ class AutoClave:
             if state == States.write_log:
 
                 self.line += chr(serial_data[index])
-                
+
                 if serial_data[index] == 0x0D:
+                    print("if serial_data[index] == 0x0D:")
                     print(self.line)
                     self.write_temp_file()
                     state = States.save_data_cycle
