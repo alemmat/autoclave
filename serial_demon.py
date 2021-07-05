@@ -111,7 +111,9 @@ class AutoClave:
 def run_machine():
 
     autoclave = AutoClave()
-    autoclave.state_machine(States.start_cycle)
+
+    while True:
+        autoclave.state_machine(States.start_cycle)
 
 
 if __name__ == '__main__':
