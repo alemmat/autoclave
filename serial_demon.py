@@ -18,6 +18,7 @@ class AutoClave:
 
     def __init__(self):
         self.serial_device = serial.Serial('/dev/ttyAMA0')
+        self.state = States.start_cycle
         self.line = ""
 
     def read_serial(self):
@@ -57,7 +58,7 @@ class AutoClave:
         if os.path.isfile("temp.txt"):
             os.remove("temp.txt")
 
-    def state_machine(self, state):
+    def state_machine(self):
 
         serial_data = self.read_serial()
         print(serial_data)
@@ -65,7 +66,9 @@ class AutoClave:
 
         while len(serial_data) > index:
 
-            if state == States.write_log:
+            if self.state == States.write_log:
+
+                print("if serial_data[index] == 0x0D:")
 
                 self.line += chr(serial_data[index])
 
@@ -73,36 +76,36 @@ class AutoClave:
                     print("if serial_data[index] == 0x0D:")
                     print(self.line)
                     self.write_temp_file()
-                    state = States.save_data_cycle
+                    self.state = States.save_data_cycle
 
-            if state == States.start_cycle:
+            if self.state == States.start_cycle:
 
                 if serial_data[index] == 0xF1:
                     self.create_file()
-                    state = States.save_data_cycle
+                    self.state = States.save_data_cycle
 
                 if serial_data[index] == 0xF4:
-                    state = States.audit
+                    self.state = States.audit
 
                 if serial_data[index] == 0xF8:
-                    state = States.set_time
+                    self.state = States.set_time
 
-            if state == States.save_data_cycle:
+            if self.state == States.save_data_cycle:
 
                 if serial_data[index] == 0xF2:
                     self.write_pdf()
                     self.delete_temp_file()
-                    state = States.start_cycle
+                    self.state = States.start_cycle
 
                 if len(serial_data) > 0:
                     if serial_data[index] == 0xF3:
-                        state = States.write_log
+                        self.state = States.write_log
 
-            if state == States.audit:
-                state = States.start_cycle
+            if self.state == States.audit:
+                self.state = States.start_cycle
 
-            if state == States.set_time:
-                state = States.start_cycle
+            if self.state == States.set_time:
+                self.state = States.start_cycle
 
             index = index + 1
 
@@ -111,15 +114,13 @@ class AutoClave:
         print("print(len(serial_data))")
         print("print(index)")
 
-        return state
-
 
 def run_machine():
 
     autoclave = AutoClave()
 
     while True:
-        autoclave.state_machine(States.start_cycle)
+        autoclave.state_machine()
 
 
 if __name__ == '__main__':
