@@ -64,9 +64,9 @@ class AutoClave:
 
         while True:
 
-        serial_data = self.read_serial()
-        print(serial_data)
-        index = 0
+            serial_data = self.read_serial()
+            print(serial_data)
+            index = 0
 
             while len(serial_data) > index:
 
