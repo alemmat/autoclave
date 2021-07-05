@@ -60,7 +60,7 @@ class AutoClave:
     def state_machine(self, state):
 
         serial_data = self.read_serial()
-        print("serial_data")
+        print(serial_data)
         index = 0
 
         while len(serial_data) > index:
