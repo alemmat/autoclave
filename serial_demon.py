@@ -42,7 +42,6 @@ class AutoClave:
         f = open("temp.txt", "r")
 
         for x in f:
-            pdf.set_left_margin(2.5)
             pdf.cell( 10, 3, txt=x, ln=1, align='l')
 
         pdf.output(datetime.utcnow().strftime('%B %d %Y - %H:%M:%S')+".pdf")
@@ -63,7 +62,6 @@ class AutoClave:
         while True:
 
             serial_data = self.read_serial()
-            print(serial_data)
             index = 0
 
             while len(serial_data) > index:
