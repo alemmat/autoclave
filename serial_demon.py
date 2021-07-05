@@ -64,63 +64,54 @@ class AutoClave:
         print(serial_data)
         index = 0
 
-        while len(serial_data) > index:
+        while True:
 
-            if self.state == States.write_log:
+            while len(serial_data) > index:
 
-                print("if serial_data[index] == 0x0D:")
+                if self.state == States.write_log:
 
-                self.line += chr(serial_data[index])
+                    self.line += chr(serial_data[index])
 
-                if serial_data[index] == 0x0D:
-                    print("if serial_data[index] == 0x0D:")
-                    print(self.line)
-                    self.write_temp_file()
-                    self.state = States.save_data_cycle
+                    if serial_data[index] == 0x0D:
+                        print(self.line)
+                        self.write_temp_file()
+                        self.state = States.save_data_cycle
 
-            if self.state == States.start_cycle:
+                if self.state == States.start_cycle:
 
-                if serial_data[index] == 0xF1:
-                    self.create_file()
-                    self.state = States.save_data_cycle
+                    if serial_data[index] == 0xF1:
+                        self.create_file()
+                        self.state = States.save_data_cycle
 
-                if serial_data[index] == 0xF4:
-                    self.state = States.audit
+                    if serial_data[index] == 0xF4:
+                        self.state = States.audit
 
-                if serial_data[index] == 0xF8:
-                    self.state = States.set_time
+                    if serial_data[index] == 0xF8:
+                        self.state = States.set_time
 
-            if self.state == States.save_data_cycle:
+                if self.state == States.save_data_cycle:
 
-                if serial_data[index] == 0xF2:
-                    self.write_pdf()
-                    self.delete_temp_file()
+                    if serial_data[index] == 0xF2:
+                        self.write_pdf()
+                        self.delete_temp_file()
+                        self.state = States.start_cycle
+
+                    if len(serial_data) > 0:
+                        if serial_data[index] == 0xF3:
+                            self.state = States.write_log
+
+                if self.state == States.audit:
                     self.state = States.start_cycle
 
-                if len(serial_data) > 0:
-                    if serial_data[index] == 0xF3:
-                        self.state = States.write_log
+                if self.state == States.set_time:
+                    self.state = States.start_cycle
 
-            if self.state == States.audit:
-                self.state = States.start_cycle
-
-            if self.state == States.set_time:
-                self.state = States.start_cycle
-
-            index = index + 1
-
-        print(len(serial_data))
-        print(index)
-        print("print(len(serial_data))")
-        print("print(index)")
-
+                index = index + 1
 
 def run_machine():
 
     autoclave = AutoClave()
-
-    while True:
-        autoclave.state_machine()
+    autoclave.state_machine()
 
 
 if __name__ == '__main__':
