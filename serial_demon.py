@@ -60,17 +60,21 @@ class AutoClave:
 
     def state_machine(self):
 
+
+
+        while True:
+
         serial_data = self.read_serial()
         print(serial_data)
         index = 0
-
-        while True:
 
             while len(serial_data) > index:
 
                 if self.state == States.write_log:
 
                     self.line += chr(serial_data[index])
+
+                    print(self.line)
 
                     if serial_data[index] == 0x0D:
                         print(self.line)
