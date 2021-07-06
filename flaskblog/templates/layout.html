@@ -48,6 +48,13 @@
     </header>
     <main role="main" class="container">
       <div class="row">
+        <div class="col-md-4">
+          <a class="nav-item nav-link" href="{{ url_for('main.home') }}">Ciclos</a>
+          <a class="nav-item nav-link" href="{{ url_for('users.account') }}">Auditoría</a>
+          <a class="nav-item nav-link" href="{{ url_for('users.account') }}">Configuración</a>
+
+
+        </div>
         <div class="col-md-8">
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -60,9 +67,7 @@
           {% endwith %}
           {% block content %}{% endblock %}
         </div>
-        <div class="col-md-4">
 
-        </div>
       </div>
     </main>
 
