@@ -12,6 +12,7 @@ class States(Enum):
     set_time = auto()
     write_log = auto()
     send_ready = auto()
+    wait_time_config = auto()
 
 
 class AutoClave:
@@ -19,7 +20,7 @@ class AutoClave:
     def __init__(self):
 
         self.serial_device = serial.Serial('/dev/ttyAMA0')
-        self.state = States.set_time
+        self.state = States.wait_time_config
         self.line = ""
 
     def read_serial(self):
@@ -112,23 +113,23 @@ class AutoClave:
 
                     self.state = States.start_cycle
 
-                if self.state == States.set_time:
+                if self.state == States.wait_time_config:
 
                     if serial_data[index] == 0xF8:
 
-                        if index_time > 0:
-                            time_byte_array.append(serial_data[index])
+                        self.state = States.set_time
 
-                        print(time_byte_array)
+                if self.state == States.set_time:
 
-                        index_time = index_time +1
+                    time_byte_array.append(serial_data[index])
+                    print(time_byte_array)
+                    index_time = index_time +1
 
-                        if index_time > 6:
+                    if index_time > 6:
 
-                            index_time = 0
-                            config_time()
-                            self.state = States.start_cycle
-
+                        index_time = 0
+                        config_time()
+                        self.state = States.start_cycle
 
 
                 index = index + 1
