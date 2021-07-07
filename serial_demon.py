@@ -22,6 +22,7 @@ class AutoClave:
         self.serial_device = serial.Serial('/dev/ttyAMA0')
         self.state = States.wait_time_config
         self.line = ""
+        self.time_byte_array = bytearray()
 
     def read_serial(self):
 
@@ -48,7 +49,7 @@ class AutoClave:
         for x in f:
             pdf.cell( 10, 3, txt=x, ln=1, align='l')
 
-        pdf.output(datetime.utcnow().strftime('%B %d %Y - %H:%M:%S')+".pdf")
+        pdf.output("C"+datetime.utcnow().strftime('%y_%b_%d_%H:%M:%S')+".pdf")
 
     def create_file(self):
 
@@ -62,11 +63,11 @@ class AutoClave:
             os.remove("temp.txt")
 
     def config_time(self):
-         os.system('sudo date -u --set="%s"' % "Tue Nov 13 15:23:34 PDT 2018")
+
+        print(self.time_byte_array)
+        os.system('sudo date -u --set="%s"' % "Tue Nov 13 15:23:34 PDT 2018")
 
     def state_machine(self):
-
-        time_byte_array = bytearray()
 
         index_time = 0
 
@@ -74,6 +75,7 @@ class AutoClave:
 
             serial_data = self.read_serial()
             index = 0
+            print(serial_data)
 
             while len(serial_data) > index:
 
@@ -121,16 +123,17 @@ class AutoClave:
 
                 if self.state == States.set_time:
 
+                    if index_time > 0:
 
-                    time_byte_array.append(serial_data[index])
-                    print(time_byte_array)
+                        self.time_byte_array.append(serial_data[index])
+
                     index_time = index_time +1
 
                     if index_time > 6:
 
                         index_time = 0
-                        print(time_byte_array)
                         print(serial_data)
+                        self.config_time()
                         self.state = States.start_cycle
 
 
