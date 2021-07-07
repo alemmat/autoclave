@@ -121,6 +121,7 @@ class AutoClave:
 
                 if self.state == States.set_time:
 
+
                     time_byte_array.append(serial_data[index])
                     print(time_byte_array)
                     index_time = index_time +1
@@ -129,6 +130,7 @@ class AutoClave:
 
                         index_time = 0
                         print(time_byte_array)
+                        print(serial_data)
                         self.state = States.start_cycle
 
 
