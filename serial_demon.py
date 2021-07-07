@@ -49,7 +49,7 @@ class AutoClave:
         for x in f:
             pdf.cell( 10, 3, txt=x, ln=1, align='l')
 
-        pdf.output("C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M:%S')+".pdf")
+        pdf.output("C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf")
 
     def create_file(self):
 
