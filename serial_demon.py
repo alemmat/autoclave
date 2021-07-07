@@ -127,7 +127,7 @@ class AutoClave:
 
                             index_time = 0
                             config_time()
-                            self.state = States.start_cycle:
+                            self.state = States.start_cycle
 
 
 
