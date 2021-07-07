@@ -113,6 +113,8 @@ class AutoClave:
 
                 if self.state == States.set_time:
 
+                    print(serial_data)
+
                     self.state = States.start_cycle
 
                 index = index + 1
