@@ -5,7 +5,6 @@ from fpdf import FPDF
 from datetime import datetime
 import time
 
-
 class States(Enum):
     start_cycle = auto()
     save_data_cycle = auto()
@@ -60,6 +59,9 @@ class AutoClave:
         if os.path.isfile("temp.txt"):
             os.remove("temp.txt")
 
+    def config_time(self):
+         os.system('sudo date -u --set="%s"' % "Tue Nov 13 15:23:34 PDT 2018")
+
     def state_machine(self):
 
         while True:
@@ -110,12 +112,14 @@ class AutoClave:
                     self.state = States.start_cycle
 
                 if self.state == States.set_time:
-                    
+
                     self.state = States.start_cycle
 
                 index = index + 1
 
 def run_machine():
+
+    os.system('sudo date -u --set="%s"' % "Tue Nov 13 15:23:34 PDT 2018")
 
     autoclave = AutoClave()
     autoclave.state_machine()
