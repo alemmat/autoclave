@@ -128,7 +128,7 @@ class AutoClave:
                     if index_time > 6:
 
                         index_time = 0
-                        config_time()
+                        print(time_byte_array)
                         self.state = States.start_cycle
 
 
