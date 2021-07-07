@@ -10,7 +10,8 @@ class States(Enum):
     save_data_cycle = auto()
     audit = auto()
     set_time = auto()
-    write_log = auto()
+
+    send_ready = auto()
 
 
 class AutoClave:
@@ -18,7 +19,7 @@ class AutoClave:
     def __init__(self):
 
         self.serial_device = serial.Serial('/dev/ttyAMA0')
-        self.state = States.start_cycle
+        self.state = States.set_time
         self.line = ""
 
     def read_serial(self):
@@ -64,6 +65,10 @@ class AutoClave:
 
     def state_machine(self):
 
+        time_byte_array = bytearray()
+
+        index_time = 0
+
         while True:
 
             serial_data = self.read_serial()
@@ -91,10 +96,6 @@ class AutoClave:
 
                         self.state = States.audit
 
-                    if serial_data[index] == 0xF8:
-
-                        self.state = States.set_time
-
                 if self.state == States.save_data_cycle:
 
                     if serial_data[index] == 0xF2:
@@ -113,15 +114,26 @@ class AutoClave:
 
                 if self.state == States.set_time:
 
-                    print(serial_data)
+                    if serial_data[index] == 0xF8:
 
-                    self.state = States.start_cycle
+                        if index_time > 0:
+                            time_byte_array.append(serial_data[index])
+
+                        print(time_byte_array)
+
+                        index_time = index_time +1
+
+                        if index_time > 6:
+
+                            index_time = 0
+                            def config_time():
+                            self.state = States.start_cycle:
+
+
 
                 index = index + 1
 
 def run_machine():
-
-    os.system('sudo date -u --set="%s"' % "Tue Nov 13 15:23:34 PDT 2018")
 
     autoclave = AutoClave()
     autoclave.state_machine()
