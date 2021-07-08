@@ -11,6 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 
 db = SQLAlchemy()
+app = Flask(__name__)
 
 class States(Enum):
 
@@ -31,7 +32,7 @@ class AutoClave:
         self.line = ""
         self.time_byte_array = bytearray()
 
-        app = Flask(__name__)
+
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flaskblog/site.db'
         db.init_app(app)
 
