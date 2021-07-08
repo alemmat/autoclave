@@ -7,6 +7,9 @@ import time
 
 from flaskblog.models import Ciclo
 from flaskblog import db
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 class States(Enum):
 
@@ -26,6 +29,10 @@ class AutoClave:
         self.state = States.wait_time_config
         self.line = ""
         self.time_byte_array = bytearray()
+
+        app = Flask(__name__)
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flaskblog/site.db'
+        db.init_app(app)
 
     def read_serial(self):
 
