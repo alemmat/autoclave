@@ -32,35 +32,59 @@ class AutoClave:
         data += self.serial_device.read(data_left)
         return data
 
-    def write_temp_file(self):
+    def write_temp_cycle_file(self):
+        self.write_temp_file(file_name="temp_cycle.txt")
 
-        f = open("temp.txt", "a")
+    def write_temp_audit_file(self):
+        self.write_temp_file(file_name="temp_audit.txt")
+
+    def write_temp_file(self, file_name):
+
+        f = open(file_name, "a")
         f.write(self.line)
         f.close()
         self.line = ""
 
-    def write_pdf(self):
+    def write_audit_pdf(self):
+        self.write_pdf(file_name="temp_audit.txt", letter="L")
+
+    def write_cycle_pdf(self):
+        self.write_pdf(file_name="temp_cycle.txt", letter="C")
+
+    def write_pdf(self, file_name, letter):
 
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font("Arial", size=10)
-        f = open("temp.txt", "r")
+        f = open(file_name, "r")
 
         for x in f:
             pdf.cell( 10, 3, txt=x, ln=1, align='l')
 
-        pdf.output("C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf")
+        pdf.output(letter+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf")
 
-    def create_file(self):
+    def create_temp_cycle_file(self):
+        self.create_file(file_name="temp_cycle.txt")
+
+    def create_temp_audit_file(self):
+        self.create_file(file_name="temp_audit.txt")
+
+    def create_file(self,file_name):
 
         self.delete_temp_file()
-        f = open("temp.txt", "x")
+        f = open(file_name, "x")
         f.close()
 
-    def delete_temp_file(self):
+    def delete_temp_cycle_file(self):
+        self.delete_temp_file(file_name="temp_cycle.txt")
 
-        if os.path.isfile("temp.txt"):
-            os.remove("temp.txt")
+    def delete_temp_audit_file(self):
+        self.delete_temp_file(file_name="temp_audit.txt")
+
+    def delete_temp_file(self,file_name):
+
+        if os.path.isfile(file_name):
+            os.remove(file_name)
 
     def config_time(self):
 
@@ -85,26 +109,22 @@ class AutoClave:
 
                     if serial_data[index] == 0x0D:
 
-                        self.write_temp_file()
+                        self. write_temp_cycle_file()
                         self.state = States.save_data_cycle
 
                 if self.state == States.start_cycle:
 
                     if serial_data[index] == 0xF1:
 
-                        self.create_file()
+                        self.create_temp_cycle_file()
                         self.state = States.save_data_cycle
-
-                    if serial_data[index] == 0xF4:
-
-                        self.state = States.audit
 
                 if self.state == States.save_data_cycle:
 
                     if serial_data[index] == 0xF2:
 
-                        self.write_pdf()
-                        self.delete_temp_file()
+                        self.write_cycle_pdf()
+                        self.delete_temp_cycle_file()
                         self.state = States.start_cycle
 
                     if serial_data[index] == 0xF3:
