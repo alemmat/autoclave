@@ -8,6 +8,7 @@ import time
 from flaskblog.models import Ciclo
 from flaskblog import db
 from flask_sqlalchemy import SQLAlchemy
+from flask import Flask
 
 db = SQLAlchemy()
 
