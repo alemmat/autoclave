@@ -64,14 +64,17 @@ class AutoClave:
         pdf.output(letter+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf")
 
     def create_temp_cycle_file(self):
+        
+        self.delete_temp_cycle_file()
         self.create_file(file_name="temp_cycle.txt")
 
     def create_temp_audit_file(self):
-        self.create_file(file_name="temp_audit.txt")
 
-    def create_file(self,file_name):
+        self.delete_temp_audit_file()
+        self.create_temp_file(file_name="temp_audit.txt")
 
-        self.delete_temp_file()
+    def create_temp_file(self,file_name):
+
         f = open(file_name, "x")
         f.close()
 
