@@ -32,6 +32,8 @@ class AutoClave:
         self.line = ""
         self.time_byte_array = bytearray()
 
+        app.run()
+
 
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flaskblog/site.db'
         db.init_app(app)
