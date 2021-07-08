@@ -6,6 +6,7 @@ from datetime import datetime
 import time
 
 class States(Enum):
+    
     start_cycle = auto()
     save_data_cycle = auto()
     audit = auto()
