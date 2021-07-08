@@ -5,8 +5,11 @@ from fpdf import FPDF
 from datetime import datetime
 import time
 
+from flaskblog.models import Ciclo
+from flaskblog import db
+
 class States(Enum):
-    
+
     start_cycle = auto()
     save_data_cycle = auto()
     audit = auto()
@@ -14,7 +17,6 @@ class States(Enum):
     write_log = auto()
     send_ready = auto()
     wait_time_config = auto()
-
 
 class AutoClave:
 
