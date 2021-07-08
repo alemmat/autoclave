@@ -123,6 +123,8 @@ class AutoClave:
                     if serial_data[index] == 0xF1:
 
                         self.ciclo = Ciclo(path="C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf", state=0)
+                        db.session.add(self.ciclo)
+                        db.session.commit()
 
                         self.create_temp_cycle_file()
                         self.state = States.save_data_cycle
