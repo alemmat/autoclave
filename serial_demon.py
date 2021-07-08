@@ -109,7 +109,7 @@ class AutoClave:
 
                     if serial_data[index] == 0x0D:
 
-                        self. write_temp_cycle_file()
+                        self.write_temp_cycle_file()
                         self.state = States.save_data_cycle
 
                 if self.state == States.start_cycle:
