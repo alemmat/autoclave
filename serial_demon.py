@@ -5,13 +5,8 @@ from fpdf import FPDF
 from datetime import datetime
 import time
 
-from flaskblog.models import Ciclo
-from flaskblog import db
-from flask_sqlalchemy import SQLAlchemy
-from flask import Flask
+import sqlite3
 
-db = SQLAlchemy()
-app = Flask(__name__)
 
 class States(Enum):
 
@@ -32,11 +27,6 @@ class AutoClave:
         self.line = ""
         self.time_byte_array = bytearray()
 
-        app.run()
-
-
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flaskblog/site.db'
-        db.init_app(app)
 
     def read_serial(self):
 
@@ -106,7 +96,23 @@ class AutoClave:
     def config_time(self):
 
         print(self.time_byte_array)
+        create_temp_audit_file()
         os.system('sudo date -u --set="%s"' % "Tue Nov 13 15:23:34 PDT 2018")
+
+    def create_ciclo(self):
+
+        sqlit_insert = "INSERT INTO Persons (path,date_created,status) VALUES (?,?,?);"
+        data_tuple = ("C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf", datetime.utcnow, 0)
+
+        con = sqlite3.connect('/home/pi/autoclave/flaskblog/site.db')
+        cur = con.cursor()
+        result = cur.execute(sqlit_insert,data_tuple)
+        print(result)
+        con.commit()
+        con.close()
+
+
+
 
     def state_machine(self):
 
@@ -132,10 +138,6 @@ class AutoClave:
                 if self.state == States.start_cycle:
 
                     if serial_data[index] == 0xF1:
-
-                        self.ciclo = Ciclo(path="C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf", state=0)
-                        db.session.add(self.ciclo)
-                        db.session.commit()
 
                         self.create_temp_cycle_file()
                         self.state = States.save_data_cycle
