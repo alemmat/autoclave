@@ -101,7 +101,7 @@ class AutoClave:
 
     def create_ciclo(self):
 
-        sqlit_insert = "INSERT INTO ciclo (path,date_created,status) VALUES (?,?,?);"
+        sqlit_insert = "INSERT INTO ciclo (path,date_created,state) VALUES (?,?,?);"
         data_tuple = ("C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf", datetime.utcnow, 0)
 
         con = sqlite3.connect('/home/pi/autoclave/flaskblog/site.db')
