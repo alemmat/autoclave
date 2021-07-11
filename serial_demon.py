@@ -74,8 +74,11 @@ class AutoClave:
         c = canvas.Canvas("test.pdf")
         f = open(file_name, "r")
 
+        i=0
+
         for line in f:
-            c.drawString(1 * cm, 29.7 * cm - 1 * cm - i * cm, line)
+            i = i+1
+            c.drawString(1 * cm, 29.7 * cm - 1 * cm - i * cm, line.replace('\r','').replace('\n',''))
 
         c.save()
 
@@ -153,7 +156,7 @@ class AutoClave:
                     if serial_data[index] == 0xF1:
 
                         self.create_temp_cycle_file()
-                        self.create_ciclo()
+                        #self.create_ciclo()
                         self.state = States.save_data_cycle
 
                 if self.state == States.save_data_cycle:
