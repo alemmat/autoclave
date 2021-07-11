@@ -1,10 +1,9 @@
 from enum import Enum, auto
 import os
 import serial
-from fpdf import FPDF
 from datetime import datetime
 import time
-
+from PyPDF2 import PdfFileWriter as FPDF
 import sqlite3
 
 
