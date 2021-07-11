@@ -7,15 +7,18 @@
       <tr>
         <th>Informe</th>
       </tr>
-      <tr>
-        {% for ciclo in ciclos.items %}
-        <td>
-             <a class="mr-2" href="#">
-               {{ ciclo.date_created.strftime('%Y-%m-%d') }}
-             </a>
-        </td>
-        {% endfor %}
-      </tr>
+      {% for ciclo in ciclos.items %}
+        <tr>
+
+          <td>
+               <a class="mr-2" href="#">
+                 {{ ciclo.path }}
+               </a>
+          </td>
+
+        </tr>
+      {% endfor %}
+
 
     </table>
 
