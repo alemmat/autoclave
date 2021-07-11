@@ -57,17 +57,17 @@ class AutoClave:
     def write_cycle_pdf(self):
         self.write_pdf(file_name="temp_cycle.txt", letter="C")
 
-    def write_pdf(self, file_name, letter):
-
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_font("Arial", size=10)
-        f = open(file_name, "r")
-
-        for x in f:
-            pdf.cell( 10, 3, txt=x, ln=1, align='l')
-
-        pdf.output(letter+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf")
+#    def write_pdf(self, file_name, letter):
+#
+#        pdf = FPDF()
+#        pdf.add_page()
+#        pdf.set_font("Arial", size=10)
+#        f = open(file_name, "r")
+#
+#        for x in f:
+#            pdf.cell( 10, 3, txt=x, ln=1, align='l')
+#
+#        pdf.output(letter+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf")
 
     def write_pdf(self, file_name, letter):
 
