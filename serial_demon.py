@@ -105,8 +105,8 @@ class AutoClave:
 
     def create_ciclo(self):
 
-        sqlit_insert = "INSERT INTO ciclo (path,date_created,state) VALUES (?,?,?);"
-        data_tuple = ("C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf", datetime.utcnow().strftime(), 0)
+        sqlit_insert = "INSERT INTO ciclo (path,state) VALUES (?,?);"
+        data_tuple = ("C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf", 0)
 
         con = sqlite3.connect('/home/pi/autoclave/flaskblog/site.db')
         cur = con.cursor()
@@ -144,7 +144,7 @@ class AutoClave:
                     if serial_data[index] == 0xF1:
 
                         self.create_temp_cycle_file()
-                        #self.create_ciclo()
+                        self.create_ciclo()
                         self.state = States.save_data_cycle
 
                 if self.state == States.save_data_cycle:
