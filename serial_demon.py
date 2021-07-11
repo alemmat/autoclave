@@ -3,8 +3,11 @@ import os
 import serial
 from datetime import datetime
 import time
-from PyPDF2 import PdfFileWriter as FPDF
+from PyPDF2 import PdfFileWriter
 import sqlite3
+
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm
 
 
 class States(Enum):
@@ -65,6 +68,17 @@ class AutoClave:
             pdf.cell( 10, 3, txt=x, ln=1, align='l')
 
         pdf.output(letter+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf")
+
+    def write_pdf(self, file_name, letter):
+
+        c = canvas.Canvas("test.pdf")
+        f = open(file_name, "r")
+
+        for line in f:
+            c.drawString(1 * cm, 29.7 * cm - 1 * cm - i * cm, line)
+
+        c.save()
+
 
     def create_temp_cycle_file(self):
 
