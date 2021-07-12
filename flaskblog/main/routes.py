@@ -18,6 +18,6 @@ def auditorias():
     ciclos = Ciclo.query.order_by(Ciclo.date_created.desc()).paginate(page=page, per_page=10)
     return render_template('ciclos.html', ciclos=ciclos)
 
-@main.route("/ciclos/<int:ciclo_id>", methods=['GET'])
+@main.route("/getciclo/<int:ciclo_id>", methods=['GET'])
 def downliad_cycle_inform(ciclo_id):
     return render_template('prueba.html')
