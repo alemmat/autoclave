@@ -64,13 +64,17 @@ class AutoClave:
         c = canvas.Canvas(self.path+self.cycle_name)
         f = open(file_name, "r")
 
+        textobject = canvas.beginText()
+
         i=0
 
         for line in f:
 
-            i = i + 1
-            c.drawString(1 * cm, 59.4 * cm - 1 * cm - i * cm, line.replace('\r','').replace('\n',''))
+            textobject.textLine(line)
 
+            #i = i + 1
+            #c.drawString(1 * cm, 29.7 * cm - 1 * cm - i * cm, line.replace('\r','').replace('\n',''))
+        c.drawText(textobject)
         c.save()
 
 
