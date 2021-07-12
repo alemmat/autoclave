@@ -8,4 +8,4 @@ ciclo = Blueprint('ciclo', __name__)
 def download_cycle_inform(ciclo_id):
     path = '/home/jorge/autoclave/flaskblog/static/ciclos/'
     ciclo = Ciclo.query.get_or_404(ciclo_id)
-    return send_file(path+ciclo.path,attachment_filename=ciclo.path)
+    return send_file(path+ciclo.name,attachment_filename=ciclo.name)
