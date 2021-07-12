@@ -20,5 +20,4 @@ def auditorias():
 
 @main.route("/ciclos/<int:ciclo_id>")
 def downliad_cycle_inform(ciclo_id):
-    ciclo = Ciclo.query.get_or_404(ciclo_id)
-    return "hilo"
+    return render_template('prueba.html')
