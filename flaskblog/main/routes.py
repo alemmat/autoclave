@@ -22,3 +22,4 @@ def auditorias():
 def downliad_cycle_inform(ciclo_id):
 	ciclo = Ciclo.query.get_or_404(1)
 	return ciclo_id
+
