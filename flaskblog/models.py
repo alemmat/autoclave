@@ -15,12 +15,12 @@ class User(db.Model, UserMixin):
 
 class Ciclo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    path = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     state = db.Column(db.Integer, nullable=False)
 
-class Log(db.Model):
+class Audit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    path = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     state = db.Column(db.Integer, nullable=False)
