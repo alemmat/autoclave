@@ -28,6 +28,8 @@ class AutoClave:
         self.state = States.wait_time_config
         self.line = ""
         self.time_byte_array = bytearray()
+        self.path = '/home/jorge/autoclave/flaskblog/static/ciclos/'
+
 
 
     def read_serial(self):
@@ -59,7 +61,7 @@ class AutoClave:
 
     def write_pdf(self, file_name, letter):
 
-        c = canvas.Canvas("test.pdf")
+        c = canvas.Canvas(self.path+self.cycle_name)
         f = open(file_name, "r")
 
         i=0
@@ -107,8 +109,10 @@ class AutoClave:
 
     def create_ciclo(self):
 
+        self.cycle_name = "C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf"
+
         sqlit_insert = "INSERT INTO ciclo (name,date_created,state) VALUES (?,?,?)"
-        data_tuple = ("C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf", datetime.utcnow(), 0)
+        data_tuple = ( self.cycle_name, datetime.utcnow(), 0)
 
         con = sqlite3.connect('/home/pi/autoclave/flaskblog/site.db')
         cur = con.cursor()
