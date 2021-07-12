@@ -17,3 +17,9 @@ def auditorias():
     page = request.args.get('page', 1, type=int)
     ciclos = Ciclo.query.order_by(Ciclo.date_created.desc()).paginate(page=page, per_page=10)
     return render_template('ciclos.html', ciclos=ciclos)
+
+@main.route("/ciclos/<int:ciclo_id>")
+def ciclos(ciclo_id):
+    page = request.args.get('page', 1, type=int)
+    ciclos = Ciclo.query.order_by(Ciclo.date_created.desc()).paginate(page=page, per_page=10)
+    return render_template('ciclos.html', ciclos=ciclos)

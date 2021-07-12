@@ -65,7 +65,9 @@ class AutoClave:
         i=0
 
         for line in f:
+
             i = i+1
+            print(29.7 * cm - 1 * cm - i * cm)
             c.drawString(1 * cm, 29.7 * cm - 1 * cm - i * cm, line.replace('\r','').replace('\n',''))
 
         c.save()
@@ -105,7 +107,7 @@ class AutoClave:
 
     def create_ciclo(self):
 
-        sqlit_insert = "INSERT INTO ciclo (path,date_created,state) VALUES (?,?,?) RETURNING *;"
+        sqlit_insert = "INSERT INTO ciclo (path,date_created,state) VALUES (?,?,?)"
         data_tuple = ("C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf", datetime.utcnow(), 0)
 
         con = sqlite3.connect('/home/pi/autoclave/flaskblog/site.db')
