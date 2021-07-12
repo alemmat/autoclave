@@ -65,16 +65,11 @@ class AutoClave:
         f = open(file_name, "r")
 
         textobject = c.beginText()
-        textobject.setTextOrigin(cm, 29.7*cm)
-
-        i=0
+        textobject.setTextOrigin(cm, 28.7*cm)
 
         for line in f:
+            textobject.textLine(line.replace('\r','').replace('\n',''))
 
-            textobject.textLine(line)
-
-            #i = i + 1
-            #c.drawString(1 * cm, 29.7 * cm - 1 * cm - i * cm, line.replace('\r','').replace('\n',''))
         c.drawText(textobject)
         c.save()
 
