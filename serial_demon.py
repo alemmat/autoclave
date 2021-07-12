@@ -28,7 +28,7 @@ class AutoClave:
         self.state = States.wait_time_config
         self.line = ""
         self.time_byte_array = bytearray()
-        self.path = '/home/jorge/autoclave/flaskblog/static/ciclos/'
+        self.path = '/home/pi/autoclave/flaskblog/static/ciclos/'
 
 
 
