@@ -6,7 +6,7 @@ main = Blueprint('main', __name__)
 
 
 @main.route("/")
-@main.route("/ciclos")
+@main.route("/ciclos/")
 def ciclos():
     page = request.args.get('page', 1, type=int)
     ciclos = Ciclo.query.order_by(Ciclo.date_created.desc()).paginate(page=page, per_page=10)
