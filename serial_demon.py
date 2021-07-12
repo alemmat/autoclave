@@ -64,7 +64,7 @@ class AutoClave:
         c = canvas.Canvas(self.path+self.cycle_name)
         f = open(file_name, "r")
 
-        textobject = canvas.beginText()
+        textobject = c.beginText()
         textobject.setTextOrigin(cm, 2.5*cm)
 
         i=0
