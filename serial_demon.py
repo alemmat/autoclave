@@ -68,9 +68,7 @@ class AutoClave:
 
         for line in f:
 
-            i = i+1
-            print(29.7 * cm - 1 * cm - i * cm)
-            print(29.7 * cm - 1 * cm - i )
+            i = i + 1
             c.drawString(1 * cm, 29.7 * cm - 1 * cm - i * cm, line.replace('\r','').replace('\n',''))
 
         c.save()
