@@ -65,7 +65,7 @@ class AutoClave:
         f = open(file_name, "r")
 
         textobject = c.beginText()
-        textobject.setTextOrigin(cm, 2.5*cm)
+        textobject.setTextOrigin(cm, 29.7*cm)
 
         i=0
 
