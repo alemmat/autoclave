@@ -70,6 +70,7 @@ class AutoClave:
 
             i = i+1
             print(29.7 * cm - 1 * cm - i * cm)
+            print(29.7 * cm - 1 * cm - i )
             c.drawString(1 * cm, 29.7 * cm - 1 * cm - i * cm, line.replace('\r','').replace('\n',''))
 
         c.save()
