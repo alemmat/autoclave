@@ -117,7 +117,7 @@ class AutoClave:
         con = sqlite3.connect('/home/pi/autoclave/flaskblog/site.db')
         cur = con.cursor()
         result = cur.execute(sqlit_insert,data_tuple)
-        print(result)
+        print(result.fetchall())
         con.commit()
         con.close()
 
