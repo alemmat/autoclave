@@ -4,22 +4,37 @@
     <table>
       <tr>
         <th>INFORMES DE CICLOS</th>
+        <th>ESTATUS</th>
         <th>ACCIONES</th>
       </tr>
 
       {% for ciclo in ciclos.items %}
         <tr>
-          <td>
-            <a class="mr-2" href="{{ url_for('ciclo.download_cycle_inform', ciclo_id=ciclo.id) }}">
-              {{ ciclo.name }}
-            </a>
-          </td>
 
-          <td>
-            <button type="button" class="btn btn-danger btn-sm m-1"  onclick="callDeleteModal("{{url_for('ciclo.delete_ciclo', ciclo_id=ciclo.id) }}")">
-              Delete
-            </button>
-          </td>
+          {% if ciclo.state == 0 %}
+            <td>
+              <a class="mr-2" href="{{ url_for('ciclo.download_cycle_inform', ciclo_id=ciclo.id) }}">
+                {{ ciclo.name }}
+              </a>
+            </td>
+            <td>CICLO TERMINADO</td>
+            <td>
+              <button type="button" class="btn btn-danger btn-sm m-1"  onclick="callDeleteModal('{{url_for('ciclo.delete_ciclo', ciclo_id=ciclo.id) }}')">
+                Delete
+              </button>
+            </td>
+          {% else %}
+            <td>{{ ciclo.name }}</td>
+            <td>CICLO EN CURSO</td>
+            <td>
+              <button type="button" class="btn btn-danger btn-sm m-1" >
+                Delete
+              </button>
+            </td>
+
+
+          {% endif %}
+
         </tr>
       {% endfor %}
     </table>
@@ -57,12 +72,7 @@
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
             <div id="formdeletecycle">
-
-
-
             </div>
-
-
           </div>
         </div>
       </div>
@@ -73,14 +83,11 @@
 
       function callDeleteModal(informe_id){
 
-      console.log(informe_id);
-
           var formdeletecycle = "<form action="+informe_id+" method='POST'>";
           formdeletecycle += "<input class='btn btn-danger' type='submit' value='Delete'>"
-          formdeletecycle += "</form>"
+          formdeletecycle += "</form>";
           document.getElementById("formdeletecycle").innerHTML = formdeletecycle;
           $("#deleteModal").modal();
-
       }
 
     </script>
