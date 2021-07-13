@@ -8,6 +8,7 @@ import sqlite3
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
+from reportlab.lib.styles import ParagraphStyle
 
 
 class States(Enum):
@@ -64,10 +65,12 @@ class AutoClave:
 
         textobject = c.beginText()
         textobject.setTextOrigin(cm, 28.7*cm)
+        ps = ParagraphStyle('title', leading=6)
 
         for line in f:
             textobject.textLine(line.replace('\r','').replace('\n',''))
 
+        ps = ParagraphStyle(textobject, leading=6)
         c.drawText(textobject)
         c.save()
 
