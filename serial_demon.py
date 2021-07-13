@@ -30,8 +30,6 @@ class AutoClave:
         self.time_byte_array = bytearray()
         self.path = '/home/pi/autoclave/flaskblog/static/ciclos/'
 
-
-
     def read_serial(self):
 
         data = self.serial_device.read()
@@ -120,9 +118,6 @@ class AutoClave:
         con.commit()
         con.close()
 
-
-
-
     def state_machine(self):
 
         index_time = 0
@@ -188,7 +183,6 @@ class AutoClave:
                         print(serial_data)
                         self.config_time()
                         self.state = States.start_cycle
-
 
                 index = index + 1
 
