@@ -1,40 +1,87 @@
 {% extends "layout.html" %}
 {% block content %}
 
-
-
     <table>
       <tr>
-        <th>Informe</th>
+        <th>INFORMES DE CICLOS</th>
+        <th>ACCIONES</th>
       </tr>
+
       {% for ciclo in ciclos.items %}
         <tr>
-
           <td>
-               <a class="mr-2" href="#">
-                 {{ ciclo.path }}
-               </a>
+            <a class="mr-2" href="{{ url_for('ciclo.download_cycle_inform', ciclo_id=ciclo.id) }}">
+              {{ ciclo.name }}
+            </a>
           </td>
 
+          <td>
+            <button type="button" class="btn btn-danger btn-sm m-1"  onclick="callDeleteModal("{{url_for('ciclo.delete_ciclo', ciclo_id=ciclo.id) }}")">
+              Delete
+            </button>
+          </td>
         </tr>
       {% endfor %}
-
-
     </table>
-
-
 
     <br>
 
     {% for page_num in ciclos.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
       {% if page_num %}
         {% if ciclos.page == page_num %}
-          <a class="btn btn-info mb-4" href="{{ url_for('main.ciclos', page=page_num) }}">{{ page_num }}</a>
+          <a class="btn btn-info mb-4" href="{{ url_for('main.landing', page=page_num) }}">{{ page_num }}</a>
         {% else %}
-          <a class="btn btn-outline-info mb-4" href="{{ url_for('main.ciclos', page=page_num) }}">{{ page_num }}</a>
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('main.landing', page=page_num) }}">{{ page_num }}</a>
         {% endif %}
       {% else %}
         ...
       {% endif %}
     {% endfor %}
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true" id="deletemodal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+
+            <h5 class="modal-title" id="deleteModalLabel">
+              Usted desea borrar este informe?
+              Este paso es inrreversible
+            </h5>
+
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+            <div id="formdeletecycle">
+
+
+
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+
+      function callDeleteModal(informe_id){
+
+      console.log(informe_id);
+
+          var formdeletecycle = "<form action="+informe_id+" method='POST'>";
+          formdeletecycle += "<input class='btn btn-danger' type='submit' value='Delete'>"
+          formdeletecycle += "</form>"
+          document.getElementById("formdeletecycle").innerHTML = formdeletecycle;
+          $("#deleteModal").modal();
+
+      }
+
+    </script>
 {% endblock content %}
