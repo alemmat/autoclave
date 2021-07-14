@@ -34,7 +34,7 @@ class AutoClave:
         self.path = '/home/pi/autoclave/flaskblog/static/ciclos/'
 
         self.ciclo_id = 0
-        self.localhost = "http://10.0.0.3:5000"
+        self.localhost = "http://127.0.0.1:5000"
         self.create_new_cycle = "/ciclo/new"
         self.insert_line = "/ciclo/{}/insert"
 
@@ -121,7 +121,7 @@ class AutoClave:
         self.ciclo_id = jsonResponse["ciclo_id"]
 
     def l_insert(self):
-        requests.post("http://127.0.0.1:5000/ciclo/1/insert", json={'line':'Etapa 9 - Pulsos Vacio-Vr'})
+        response = requests.post(self.localhost+"/ciclo/1/insert", json={'line':'Etapa 9 - Pulsos Vacio-Vr'})
 
     def state_machine(self):
 
