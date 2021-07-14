@@ -114,20 +114,9 @@ class AutoClave:
     def create_ciclo(self):
 
         response = requests.get(self.localhost+self.create_new_cycle)
-
-        p
-
-        self.cycle_name = "C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf"
-
-        sqlit_insert = "INSERT INTO ciclo (name,date_created,state) VALUES (?,?,?)"
-        data_tuple = ( self.cycle_name, datetime.utcnow(), 0)
-
-        con = sqlite3.connect('/home/pi/autoclave/flaskblog/site.db')
-        cur = con.cursor()
-        result = cur.execute(sqlit_insert,data_tuple)
-        print(result.fetchall())
-        con.commit()
-        con.close()
+        jsonResponse = response.json()
+        self.ciclo_id = jsonResponse["ciclo_id"]
+        print(self.ciclo_id)
 
     def state_machine(self):
 
