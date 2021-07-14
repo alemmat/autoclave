@@ -121,7 +121,7 @@ class AutoClave:
         self.ciclo_id = jsonResponse["ciclo_id"]
 
     def l_insert(self):
-        response = requests.post(self.localhost+self.insert_line.format(str(9)), json={'line':'Etapa 9 - Pulsos Vacio-Vr'})
+        response = requests.post(self.localhost+self.insert_line.format(str(self.ciclo_id)), json={'line':'Etapa 9 - Pulsos Vacio-Vr'})
 
     def state_machine(self):
 
