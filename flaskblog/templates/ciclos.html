@@ -11,7 +11,7 @@
       {% for ciclo in ciclos.items %}
         <tr>
 
-          {% if ciclo.state == 0 %}
+          {% if ciclo.state == 1 %}
             <td>
               <a class="mr-2" href="{{ url_for('ciclo.download_cycle_inform', ciclo_id=ciclo.id) }}">
                 {{ ciclo.name }}
