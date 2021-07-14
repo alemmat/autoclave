@@ -71,10 +71,9 @@ def close_cycle(ciclo_id):
     c = canvas.Canvas(path+ciclo.name)
     textobject = c.beginText()
     textobject.setTextOrigin(cm, 28.7*cm)
-    ps = ParagraphStyle('title', leading=6)
 
     for lin in ciclo.line:
-        textobject.textLine(lin.string.replace('\r',''))
+        textobject.textLine(lin.string)
 
     ps = ParagraphStyle(textobject, leading=6)
     c.drawText(textobject)
