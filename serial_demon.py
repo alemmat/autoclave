@@ -120,11 +120,6 @@ class AutoClave:
         jsonResponse = response.json()
         self.ciclo_id = jsonResponse["ciclo_id"]
 
-    def insert_line(self):
-
-        response = requests.post(self.localhost+self.insert_line.format(str(self.line)), json={'line':'hola'})
-
-
     def state_machine(self):
 
         index_time = 0
@@ -144,7 +139,7 @@ class AutoClave:
                     if serial_data[index] == 0x0D:
 
                         self.write_temp_cycle_file()
-                        self.insert_line()
+
                         self.state = States.save_data_cycle
 
                 if self.state == States.start_cycle:
