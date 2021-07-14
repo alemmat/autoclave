@@ -18,6 +18,7 @@ class Cycle(db.Model):
     name = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     state = db.Column(db.Integer, nullable=False)
+    line = db.relationship('LineCycle', backref='line', lazy=True)
 
 class Audit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
