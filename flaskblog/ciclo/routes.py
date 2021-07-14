@@ -1,8 +1,9 @@
-from flask import render_template, request, Blueprint, send_file, redirect, url_for, flash
+from flask import render_template, request, Blueprint, send_file, redirect, url_for, flash, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from flaskblog.models import Ciclo
 from flaskblog import db
 import os
+from datetime import datetime
 
 ciclo = Blueprint('ciclo', __name__)
 
@@ -38,3 +39,11 @@ def show_all_ciclo():
     page = request.args.get('page', 1, type=int)
     ciclos = Ciclo.query.order_by(Ciclo.date_created.desc()).paginate(page=page, per_page=5)
     return render_template('ciclos.html', ciclos=ciclos)
+
+@ciclo.route("/ciclo/new")
+
+def new_ciclo():
+    ciclo = Ciclo(name="C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf", state=0)
+    db.session.add(ciclo)
+    db.session.commit()
+    return jsonify( ciclo_id = ciclo.id)

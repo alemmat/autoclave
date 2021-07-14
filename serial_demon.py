@@ -10,6 +10,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
 from reportlab.lib.styles import ParagraphStyle
 
+import requests
+
 
 class States(Enum):
 
@@ -30,6 +32,8 @@ class AutoClave:
         self.line = ""
         self.time_byte_array = bytearray()
         self.path = '/home/pi/autoclave/flaskblog/static/ciclos/'
+        self.localhost = "http://127.0.0.1:5000"
+        self.create_new_cycle = "/ciclo/new"
 
     def read_serial(self):
 
@@ -108,6 +112,10 @@ class AutoClave:
         os.system('sudo date -u --set="%s"' % "Tue Nov 13 15:23:34 PDT 2018")
 
     def create_ciclo(self):
+
+        response = requests.get(self.localhost+self.create_new_cycle)
+
+        p
 
         self.cycle_name = "C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf"
 
