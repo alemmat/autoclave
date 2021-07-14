@@ -56,8 +56,4 @@ def insert_line(ciclo_id):
     line = LineCycle(string = line_json["line"],cycle_id=ciclo_id)
     db.session.add(line)
     db.session.commit()
-
-    for v in ciclo.line:
-        print(v.string)
-
     return "hola"+line_json["line"]
