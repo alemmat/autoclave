@@ -98,7 +98,7 @@ class AutoClave:
 
                     if serial_data[index] == 0xF2:
 
-                        self.close_cycle()
+                        self.c_cycle()
                         self.state = States.start_cycle
 
                     if serial_data[index] == 0xF3:
