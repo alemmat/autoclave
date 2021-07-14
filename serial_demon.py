@@ -51,7 +51,6 @@ class AutoClave:
     def config_time(self):
 
         print(self.time_byte_array)
-        self.create_temp_audit_file()
         os.system('sudo date -u --set="%s"' % "Tue Nov 13 15:23:34 PDT 2018")
 
     def create_ciclo(self):
