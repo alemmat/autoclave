@@ -74,7 +74,7 @@ def close_cycle(ciclo_id):
     ps = ParagraphStyle('title', leading=6)
 
     for lin in ciclo.line:
-        textobject.textLine(lin.replace('\r','').replace('\n',''))
+        textobject.textLine(lin.string.replace('\r','').replace('\n',''))
 
     ps = ParagraphStyle(textobject, leading=6)
     c.drawText(textobject)
