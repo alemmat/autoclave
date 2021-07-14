@@ -76,7 +76,7 @@ def close_cycle(ciclo_id):
         textobject.textLine(lin.string)
 
     ps = ParagraphStyle(textobject, leading=6)
-    c.drawText(textobject)
+    c.drawText(ps)
     c.save()
 
 
