@@ -4,6 +4,9 @@ from flaskblog.models import Cycle, LineCycle
 from flaskblog import db
 import os
 from datetime import datetime
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm
+from reportlab.lib.styles import ParagraphStyle
 
 ciclo = Blueprint('ciclo', __name__)
 
@@ -56,8 +59,28 @@ def insert_line(ciclo_id):
     line = LineCycle(string = line_json["line"],cycle_id=ciclo_id)
     db.session.add(line)
     db.session.commit()
+    return "ok"
 
-    for ln in ciclo.line:
-        print(ln.string)
+
+@ciclo.route("/ciclo/<int:ciclo_id>/close")
+def close_cycle(ciclo_id):
+    ciclo = Cycle.query.get_or_404(ciclo_id)
+    ciclo.state = 1
+    db.session.commit()
+
+    c = canvas.Canvas(path+ciclo.name)
+    textobject = c.beginText()
+    textobject.setTextOrigin(cm, 28.7*cm)
+    ps = ParagraphStyle('title', leading=6)
+
+    for lin in ciclo.line:
+        textobject.textLine(lin.replace('\r','').replace('\n',''))
+
+    ps = ParagraphStyle(textobject, leading=6)
+    c.drawText(textobject)
+    c.save()
+
+
+
 
     return "ok"
