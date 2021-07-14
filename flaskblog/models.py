@@ -13,7 +13,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
 
-class Ciclo(db.Model):
+class Cycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
@@ -24,3 +24,8 @@ class Audit(db.Model):
     name = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     state = db.Column(db.Integer, nullable=False)
+
+class LineCycle(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    string = db.Column(db.String(100), nullable=False)
+    cycle_id = db.Column(db.Integer, db.ForeignKey('cycle.id'), nullable=False)

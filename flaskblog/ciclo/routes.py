@@ -1,6 +1,6 @@
 from flask import render_template, request, Blueprint, send_file, redirect, url_for, flash, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
-from flaskblog.models import Ciclo
+from flaskblog.models import Cycle
 from flaskblog import db
 import os
 from datetime import datetime
@@ -13,7 +13,7 @@ path = '/home/pi/autoclave/flaskblog/static/ciclos/'
 @login_required
 def download_cycle_inform(ciclo_id):
 
-    ciclo = Ciclo.query.get_or_404(ciclo_id)
+    ciclo = Cycle.query.get_or_404(ciclo_id)
     if os.path.isfile(path+ciclo.name):
         return send_file(path+ciclo.name, attachment_filename=ciclo.name, as_attachment=True)
     flash('El archivo no existe', 'danger')
@@ -24,7 +24,7 @@ def download_cycle_inform(ciclo_id):
 @login_required
 def delete_ciclo(ciclo_id):
 
-    ciclo = Ciclo.query.get_or_404(ciclo_id)
+    ciclo = Cycle.query.get_or_404(ciclo_id)
 
     if os.path.isfile(path+ciclo.name):
         os.remove(path+ciclo.name)
@@ -37,13 +37,13 @@ def delete_ciclo(ciclo_id):
 @login_required
 def show_all_ciclo():
     page = request.args.get('page', 1, type=int)
-    ciclos = Ciclo.query.order_by(Ciclo.date_created.desc()).paginate(page=page, per_page=5)
+    ciclos = Cycle.query.order_by(Cycle.date_created.desc()).paginate(page=page, per_page=5)
     return render_template('ciclos.html', ciclos=ciclos)
 
 @ciclo.route("/ciclo/new")
 
 def new_ciclo():
-    ciclo = Ciclo(name="C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf", state=0)
+    ciclo = Cycle(name="C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf",state=0)
     db.session.add(ciclo)
     db.session.commit()
     return jsonify( ciclo_id = ciclo.id)
