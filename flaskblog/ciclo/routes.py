@@ -1,6 +1,6 @@
-from flask import render_template, request, Blueprint, send_file, redirect, url_for, flash, jsonify
+from flask import render_template, request, Blueprint, send_file, redirect, url_for, flash, jsonify, request
 from flask_login import login_user, current_user, logout_user, login_required
-from flaskblog.models import Cycle
+from flaskblog.models import Cycle, LineCycle
 from flaskblog import db
 import os
 from datetime import datetime
@@ -47,3 +47,17 @@ def new_ciclo():
     db.session.add(ciclo)
     db.session.commit()
     return jsonify( ciclo_id = ciclo.id)
+
+
+@ciclo.route("/ciclo/<int:ciclo_id>/insert", methods=['POST'])
+def insert_line(ciclo_id):
+    ciclo = Cycle.query.get_or_404(ciclo_id)
+    line_json = request.json
+    line = LineCycle(string = line_json["line"],cycle_id=ciclo_id)
+    db.session.add(line)
+    db.session.commit()
+
+    for v in ciclo.line:
+        print(v.string)
+
+    return "hola"+line_json["line"]
