@@ -64,22 +64,23 @@ def insert_line(ciclo_id):
 
 @ciclo.route("/ciclo/<int:ciclo_id>/close")
 def close_cycle(ciclo_id):
+
     ciclo = Cycle.query.get_or_404(ciclo_id)
-    ciclo.state = 1
-    db.session.commit()
+    if ciclo.state == 0:
+        
+        ciclo.state = 1
+        db.session.commit()
 
-    c = canvas.Canvas(path+ciclo.name)
-    textobject = c.beginText()
-    textobject.setTextOrigin(cm, 28.7*cm)
+        c = canvas.Canvas(path+ciclo.name)
+        textobject = c.beginText()
+        textobject.setTextOrigin(cm, 28.7*cm)
 
-    for lin in ciclo.line:
-        textobject.textLine(lin.string)
+        for lin in ciclo.line:
+            textobject.textLine(lin.string)
+            textobject.textLine("\n")
 
-    ps = ParagraphStyle(textobject, leading=6)
-    c.drawText(ps)
-    c.save()
-
-
-
+        ps = ParagraphStyle(textobject, leading=6)
+        c.drawText(textobject)
+        c.save()
 
     return "ok"

@@ -37,6 +37,8 @@ class AutoClave:
         self.localhost = "http://127.0.0.1:5000"
         self.create_new_cycle = "/ciclo/new"
         self.insert_line = "/ciclo/{}/insert"
+        self.close_cycle = "/ciclo/{}/close"
+
 
     def read_serial(self):
 
@@ -45,68 +47,6 @@ class AutoClave:
         data_left = self.serial_device.inWaiting()
         data += self.serial_device.read(data_left)
         return data
-
-    def write_temp_cycle_file(self):
-        self.write_temp_file(file_name="temp_cycle.txt")
-
-    def write_temp_audit_file(self):
-        self.write_temp_file(file_name="temp_audit.txt")
-
-    def write_temp_file(self, file_name):
-
-        f = open(file_name, "a")
-        f.write(self.line)
-        f.close()
-        self.line = ""
-
-    def write_audit_pdf(self):
-        self.write_pdf(file_name="temp_audit.txt", letter="L")
-
-    def write_cycle_pdf(self):
-        self.write_pdf(file_name="temp_cycle.txt", letter="C")
-
-    def write_pdf(self, file_name, letter):
-
-        c = canvas.Canvas(self.path+self.cycle_name)
-        f = open(file_name, "r")
-
-        textobject = c.beginText()
-        textobject.setTextOrigin(cm, 28.7*cm)
-        ps = ParagraphStyle('title', leading=6)
-
-        for line in f:
-            textobject.textLine(line.replace('\r','').replace('\n',''))
-
-        ps = ParagraphStyle(textobject, leading=6)
-        c.drawText(textobject)
-        c.save()
-
-
-    def create_temp_cycle_file(self):
-
-        self.delete_temp_cycle_file()
-        self.create_temp_file(file_name="temp_cycle.txt")
-
-    def create_temp_audit_file(self):
-
-        self.delete_temp_audit_file()
-        self.create_temp_file(file_name="temp_audit.txt")
-
-    def create_temp_file(self,file_name):
-
-        f = open(file_name, "x")
-        f.close()
-
-    def delete_temp_cycle_file(self):
-        self.delete_temp_file(file_name="temp_cycle.txt")
-
-    def delete_temp_audit_file(self):
-        self.delete_temp_file(file_name="temp_audit.txt")
-
-    def delete_temp_file(self,file_name):
-
-        if os.path.isfile(file_name):
-            os.remove(file_name)
 
     def config_time(self):
 
@@ -122,6 +62,9 @@ class AutoClave:
 
     def l_insert(self):
         response = requests.post(self.localhost+self.insert_line.format(str(self.ciclo_id)), json={'line':self.line})
+
+    def close_cycle(self):
+        requests.get(self.localhost+self.close_cycle.format(str(self.ciclo_id)))
 
     def state_machine(self):
 
@@ -149,14 +92,14 @@ class AutoClave:
                     if serial_data[index] == 0xF1:
 
                         self.create_ciclo()
+
                         self.state = States.save_data_cycle
 
                 if self.state == States.save_data_cycle:
 
                     if serial_data[index] == 0xF2:
 
-                        self.write_cycle_pdf()
-                        self.delete_temp_cycle_file()
+                        self.close_cycle()
                         self.state = States.start_cycle
 
                     if serial_data[index] == 0xF3:
