@@ -67,7 +67,7 @@ def close_cycle(ciclo_id):
 
     ciclo = Cycle.query.get_or_404(ciclo_id)
     if ciclo.state == 0:
-        
+
         ciclo.state = 1
         db.session.commit()
 
@@ -76,7 +76,7 @@ def close_cycle(ciclo_id):
         textobject.setTextOrigin(cm, 28.7*cm)
 
         for lin in ciclo.line:
-            textobject.textLine(lin.string)
+            textobject.textLine(lin.string.replace("\n","").remove("\r"))
             textobject.textLine("\n")
 
         ps = ParagraphStyle(textobject, leading=6)
