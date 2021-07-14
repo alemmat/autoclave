@@ -122,7 +122,7 @@ class AutoClave:
 
     def insert_line(self):
 
-        response = requests.post(self.localhost+self.insert_line.format(self.line), json={'line':self.line})
+        response = requests.post(self.localhost+self.insert_line.format(str(self.line)), json={'line':self.line})
 
 
     def state_machine(self):
