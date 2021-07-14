@@ -76,7 +76,7 @@ def close_cycle(ciclo_id):
         textobject.setTextOrigin(cm, 28.7*cm)
 
         for lin in ciclo.line:
-            textobject.textLine(lin.string.replace("\n","").remove("\r"))
+            textobject.textLine(lin.string.replace("\n","").replace("\r",""))
             textobject.textLine("\n")
 
         ps = ParagraphStyle(textobject, leading=6)
