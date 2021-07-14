@@ -32,8 +32,11 @@ class AutoClave:
         self.line = ""
         self.time_byte_array = bytearray()
         self.path = '/home/pi/autoclave/flaskblog/static/ciclos/'
+
+        self.ciclo_id = 0
         self.localhost = "http://127.0.0.1:5000"
         self.create_new_cycle = "/ciclo/new"
+        self.insert_line = "/ciclo/{}/insert"
 
     def read_serial(self):
 
@@ -117,6 +120,10 @@ class AutoClave:
         jsonResponse = response.json()
         self.ciclo_id = jsonResponse["ciclo_id"]
 
+    def insert_line(self):
+
+        response = requests.post(self.localhost+self.insert_line, json={'line':self.line})
+
 
     def state_machine(self):
 
@@ -137,6 +144,7 @@ class AutoClave:
                     if serial_data[index] == 0x0D:
 
                         self.write_temp_cycle_file()
+                        self.insert_line()
                         self.state = States.save_data_cycle
 
                 if self.state == States.start_cycle:
