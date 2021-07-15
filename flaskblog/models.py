@@ -30,3 +30,8 @@ class LineCycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     string = db.Column(db.String(100), nullable=False)
     cycle_id = db.Column(db.Integer, db.ForeignKey('cycle.id'), nullable=False)
+
+class LineAudit(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    string = db.Column(db.String(100), nullable=False)
+    audit_id = db.Column(db.Integer, db.ForeignKey('cycle.id'), nullable=False)    
