@@ -4,7 +4,7 @@ After=After=nginx.service
 Requires=nginx.service
 
 [Service]
-User=pi
+User=www-data
 Group=www-data
 ExecStart=uwsgi --ini /home/pi/autoclave/uwsgi.ini
 
