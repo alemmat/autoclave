@@ -3,13 +3,7 @@ import os
 import serial
 from datetime import datetime
 import time
-from PyPDF2 import PdfFileWriter
 import sqlite3
-
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import cm
-from reportlab.lib.styles import ParagraphStyle
-
 import requests
 
 

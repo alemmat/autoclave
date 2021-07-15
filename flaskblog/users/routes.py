@@ -18,7 +18,7 @@ def register():
         user = User(username=form.username.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
-        flash('Your account has been created! You are now able to log in', 'success')
+        flash('Su cuenta a sido creada. Ahora usted puede loguearse.', 'success')
         return redirect(url_for('users.login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -35,14 +35,14 @@ def login():
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('ciclo.show_all_ciclo'))
         else:
-            flash('Login Unsuccessful. Please check email and password', 'danger')
+            flash('Clave o usuario incorrecto', 'danger')
     return render_template('login.html', title='Login', form=form)
 
 
 @users.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('ciclo.show_all_ciclo'))
+    return redirect(url_for('main.landing'))
 
 
 @users.route("/account", methods=['GET', 'POST'])
@@ -52,7 +52,7 @@ def account():
     if form.validate_on_submit():
         current_user.username = form.username.data
         db.session.commit()
-        flash('Your account has been updated!', 'success')
+        flash('Su cuenta a sido creada', 'success')
         return redirect(url_for('users.account'))
     elif request.method == 'GET':
         form.username.data = current_user.username

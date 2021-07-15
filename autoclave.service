@@ -1,0 +1,12 @@
+[Unit]
+Description=uWSGI instance to serve autoclave
+After=After=nginx.service
+Requires=nginx.service
+
+[Service]
+User=pi
+Group=www-data
+ExecStart=uwsgi --ini /home/pi/autoclave/uwsgi.ini
+
+[Install]
+WantedBy=multi-user.target
