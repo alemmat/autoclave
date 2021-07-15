@@ -1,10 +1,10 @@
 server {
 listen 80;
-server_name localhost;
+server_name 10.0.0.3;
 
 location / { try_files $uri @app; }
 location @app {
 include uwsgi_params;
-uwsgi_pass unix:/runn/autoclave.sock;
+uwsgi_pass 127.0.0.1:4242;
 }
 }
