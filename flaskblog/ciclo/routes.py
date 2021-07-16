@@ -40,7 +40,7 @@ def delete_ciclo(ciclo_id):
 @login_required
 def show_all_ciclo():
     page = request.args.get('page', 1, type=int)
-    ciclos = Cycle.query.order_by(Cycle.date_created.desc()).paginate(page=page, per_page=5)
+    ciclos = Cycle.query.order_by(Cycle.date_created.desc()).paginate(page=page, per_page=10)
     return render_template('ciclos.html', ciclos=ciclos)
 
 @ciclo.route("/ciclo/new")

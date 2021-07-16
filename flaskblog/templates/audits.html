@@ -3,29 +3,29 @@
 
     <table>
       <tr>
-        <th>INFORMES DE CICLOS</th>
+        <th>ARCHIVOS</th>
         <th>ESTATUS</th>
         <th>ACCIONES</th>
       </tr>
 
-      {% for ciclo in ciclos.items %}
+      {% for audit in audits.items %}
         <tr>
 
-          {% if ciclo.state == 0 %}
+          {% if audit.state == 1 %}
             <td>
-              <a class="mr-2" href="{{ url_for('ciclo.download_cycle_inform', ciclo_id=ciclo.id) }}">
-                {{ ciclo.name }}
+              <a class="mr-2" href="{{ url_for('audit.download_audit_inform', audit_id=audit.id) }}">
+                {{ audit.name }}
               </a>
             </td>
-            <td>CICLO TERMINADO</td>
+            <td>audit TERMINADO</td>
             <td>
-              <button type="button" class="btn btn-danger btn-sm m-1"  onclick="callDeleteModal('{{url_for('ciclo.delete_ciclo', ciclo_id=ciclo.id) }}')">
+              <button type="button" class="btn btn-danger btn-sm m-1"  onclick="callDeleteModal('{{url_for('audit.delete_audit', audit_id=audit.id) }}')">
                 Delete
               </button>
             </td>
           {% else %}
-            <td>{{ ciclo.name }}</td>
-            <td>CICLO EN CURSO</td>
+            <td>{{ audit.name }}</td>
+            <td>AUDITORIA EN CURSO</td>
             <td>
               <button type="button" class="btn btn-danger btn-sm m-1" >
                 Delete
@@ -41,12 +41,12 @@
 
     <br>
 
-    {% for page_num in ciclos.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+    {% for page_num in audits.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
       {% if page_num %}
-        {% if ciclos.page == page_num %}
-          <a class="btn btn-info mb-4" href="{{ url_for('main.landing', page=page_num) }}">{{ page_num }}</a>
+        {% if audits.page == page_num %}
+          <a class="btn btn-info mb-4" href="{{ url_for('audit.show_all_audit', page=page_num) }}">{{ page_num }}</a>
         {% else %}
-          <a class="btn btn-outline-info mb-4" href="{{ url_for('main.landing', page=page_num) }}">{{ page_num }}</a>
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('audit.show_all_audit', page=page_num) }}">{{ page_num }}</a>
         {% endif %}
       {% else %}
         ...
@@ -71,7 +71,7 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
-            <div id="formdeletecycle">
+            <div id="formdeleteaudit">
             </div>
           </div>
         </div>
@@ -83,10 +83,10 @@
 
       function callDeleteModal(informe_id){
 
-          var formdeletecycle = "<form action="+informe_id+" method='POST'>";
-          formdeletecycle += "<input class='btn btn-danger' type='submit' value='Delete'>"
-          formdeletecycle += "</form>";
-          document.getElementById("formdeletecycle").innerHTML = formdeletecycle;
+          var formdeleteaudit = "<form action="+informe_id+" method='POST'>";
+          formdeleteaudit += "<input class='btn btn-danger' type='submit' value='Delete'>"
+          formdeleteaudit += "</form>";
+          document.getElementById("formdeleteaudit").innerHTML = formdeleteaudit;
           $("#deleteModal").modal();
       }
 

@@ -49,10 +49,19 @@
     <main role="main" class="container">
       <div class="row">
         <div class="col-md-4">
-          <a class="nav-item nav-link" href="{{ url_for('ciclo.show_all_ciclo') }}">Ciclos</a>
-          <a class="nav-item nav-link" href="#">Auditoría</a>
-          <a class="nav-item nav-link" href="{{ url_for('users.account') }}">Configuración</a>
 
+
+          {% if current_user.is_authenticated %}
+          <div class="row">
+          <a class="btn btn-info mb-4" style="width: 40%;" href="{{ url_for('ciclo.show_all_ciclo') }}">Ciclos</a>
+          </div>
+          <div class="row">
+          <a class="btn btn-info mb-4" style="width: 40%;" href="#">Auditoría</a>
+          </div>
+          <div class="row">
+          <a class="btn btn-info mb-4" style="width: 40%;" href="{{ url_for('users.account') }}">Configuración</a>
+          </div>
+          {% endif %}
         </div>
         <div class="col-md-8">
           {% with messages = get_flashed_messages(with_categories=true) %}
