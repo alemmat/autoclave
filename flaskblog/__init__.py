@@ -29,8 +29,10 @@ def create_app(config_class=Config):
     from flaskblog.users.routes import users
     from flaskblog.main.routes import main
     from flaskblog.ciclo.routes import ciclo
+    from flaskblog.audit.routes import audit
     app.register_blueprint(users)
     app.register_blueprint(main)
     app.register_blueprint(ciclo)
+    app.register_blueprint(audit)
 
     return app
