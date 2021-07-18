@@ -10,17 +10,29 @@ users = Blueprint('users', __name__)
 @users.route("/register", methods=['GET', 'POST'])
 
 def register():
+
     companyData = CompanyData.query.first()
-    if current_user.is_authenticated:
-        return redirect(url_for('main.ciclos'))
+
     form = RegistrationForm()
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, password=hashed_password)
-        db.session.add(user)
-        db.session.commit()
-        flash('Su cuenta a sido creada. Ahora usted puede loguearse.', 'success')
-        return redirect(url_for('users.login'))
+
+    if len( User.query.all() ) < 4:
+
+        if current_user.is_authenticated:
+            return redirect(url_for('main.ciclos'))
+
+        if form.validate_on_submit():
+
+            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            user = User(username=form.username.data, password=hashed_password)
+            db.session.add(user)
+            db.session.commit()
+            flash('Su cuenta a sido creada. Ahora usted puede loguearse.', 'success')
+            return redirect(url_for('users.login'))
+
+    else:
+        flash('Ya se han creado todos los usuarios permitidos', 'danger')
+
+
     return render_template('register.html', title='Register', form=form, companydata = companyData)
 
 
