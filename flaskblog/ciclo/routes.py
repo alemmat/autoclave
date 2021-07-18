@@ -1,6 +1,6 @@
 from flask import render_template, request, Blueprint, send_file, redirect, url_for, flash, jsonify, request
 from flask_login import login_user, current_user, logout_user, login_required
-from flaskblog.models import Cycle, LineCycle
+from flaskblog.models import Cycle, LineCycle, CompanyData
 from flaskblog import db
 import os
 from datetime import datetime
@@ -39,9 +39,10 @@ def delete_ciclo(ciclo_id):
 @ciclo.route("/ciclo")
 @login_required
 def show_all_ciclo():
+    companyData = CompanyData.query.first()
     page = request.args.get('page', 1, type=int)
     ciclos = Cycle.query.order_by(Cycle.date_created.desc()).paginate(page=page, per_page=10)
-    return render_template('ciclos.html', ciclos=ciclos)
+    return render_template('ciclos.html', ciclos=ciclos, companydata = companyData)
 
 @ciclo.route("/ciclo/new")
 

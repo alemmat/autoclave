@@ -1,6 +1,6 @@
 from flask import render_template, request, Blueprint, send_file, redirect, url_for, flash, jsonify, request
 from flask_login import login_user, current_user, logout_user, login_required
-from flaskblog.models import Audit, LineAudit
+from flaskblog.models import Audit, LineAudit, CompanyData
 from flaskblog import db
 from sqlalchemy import func
 import os
@@ -49,9 +49,10 @@ def delete_audit(audit_id):
 
 @audit.route("/audit")
 def show_all_audit():
+    companyData = CompanyData.query.first()
     page = request.args.get('page', 1, type=int)
     audits = Audit.query.order_by(Audit.date_created.desc()).paginate(page=page, per_page=10)
-    return render_template('audits.html', audits=audits)
+    return render_template('audits.html', audits=audits, companydata = companyData)
 
 @audit.route("/audit/<int:audit_id>/insert", methods=['POST'])
 def insert_line(audit_id):

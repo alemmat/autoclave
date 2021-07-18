@@ -25,6 +25,7 @@ class Audit(db.Model):
     name = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     state = db.Column(db.Integer, nullable=False)
+    line = db.relationship('LineAudit', backref='line', lazy=True)
 
 class LineCycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,4 +35,10 @@ class LineCycle(db.Model):
 class LineAudit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     string = db.Column(db.String(100), nullable=False)
-    audit_id = db.Column(db.Integer, db.ForeignKey('cycle.id'), nullable=False)    
+    audit_id = db.Column(db.Integer, db.ForeignKey('audit.id'), nullable=False)
+
+class CompanyData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    companyname = db.Column(db.String(100), nullable=False)
+    devicedesignation = db.Column(db.String(100), nullable=False)
+    ip = db.Column(db.String(100), nullable=False)

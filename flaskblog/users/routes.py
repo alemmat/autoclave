@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from flaskblog import db, bcrypt
-from flaskblog.models import User
+from flaskblog.models import User,CompanyData
 from flaskblog.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm)
 
 
@@ -10,6 +10,7 @@ users = Blueprint('users', __name__)
 @users.route("/register", methods=['GET', 'POST'])
 
 def register():
+    companyData = CompanyData.query.first()
     if current_user.is_authenticated:
         return redirect(url_for('main.ciclos'))
     form = RegistrationForm()
@@ -20,11 +21,12 @@ def register():
         db.session.commit()
         flash('Su cuenta a sido creada. Ahora usted puede loguearse.', 'success')
         return redirect(url_for('users.login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', title='Register', form=form, companydata = companyData)
 
 
 @users.route("/login", methods=['GET', 'POST'])
 def login():
+    companyData = CompanyData.query.first()
     if current_user.is_authenticated:
         return redirect(url_for('ciclo.show_all_ciclo'))
     form = LoginForm()
@@ -36,7 +38,7 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('ciclo.show_all_ciclo'))
         else:
             flash('Clave o usuario incorrecto', 'danger')
-    return render_template('login.html', title='Login', form=form)
+    return render_template('login.html', title='Login', form=form, companydata = companyData)
 
 
 @users.route("/logout")
@@ -48,6 +50,7 @@ def logout():
 @users.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
+    companyData = CompanyData.query.first()
     form = UpdateAccountForm()
     if form.validate_on_submit():
         current_user.username = form.username.data
@@ -57,4 +60,4 @@ def account():
     elif request.method == 'GET':
         form.username.data = current_user.username
 
-    return render_template('account.html', title='Account',form=form)
+    return render_template('account.html', title='Account',form=form, companydata = companyData)

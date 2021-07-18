@@ -19,7 +19,7 @@ def create_app(config_class=Config):
     app.config.from_object(Config)
     app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-    app.config["FOLDER_CYCLE"] = "/home/pi/autoclave/flaskblog/static/ciclo/"
+
 
     db.init_app(app)
     bcrypt.init_app(app)
@@ -30,9 +30,12 @@ def create_app(config_class=Config):
     from flaskblog.main.routes import main
     from flaskblog.ciclo.routes import ciclo
     from flaskblog.audit.routes import audit
+    from flaskblog.companydata.routes import companydata
+
     app.register_blueprint(users)
     app.register_blueprint(main)
     app.register_blueprint(ciclo)
     app.register_blueprint(audit)
+    app.register_blueprint(companydata)
 
     return app
