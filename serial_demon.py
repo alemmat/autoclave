@@ -16,6 +16,8 @@ class States(Enum):
     write_log = auto()
     send_ready = auto()
     wait_time_config = auto()
+    audit = auto()
+    cycle  = auto()
 
 class AutoClave:
 
@@ -28,10 +30,11 @@ class AutoClave:
         self.path = '/home/pi/autoclave/flaskblog/static/ciclos/'
 
         self.ciclo_id = 0
+        self.audit_id = 0
         self.localhost = "http://127.0.0.1:5000"
 
         self.create_new_cycle = "/ciclo/new"
-        self.insert_cycle_line = "/ciclo/{}/insert"
+        self.insert_line = "/{dir}/{id}/insert"
         self.close_cycle = "/ciclo/{}/close"
 
         self.create_new_audit = "/audit/new"
@@ -63,8 +66,8 @@ class AutoClave:
         jsonResponse = response.json()
         self.ciclo_id = jsonResponse["ciclo_id"]
 
-    def l_insert(self):
-        response = requests.post(self.localhost+self.insert_cycle_line.format(str(self.ciclo_id)), json={'line':self.line})
+    def l_insert(self, line):
+        response = requests.post(self.localhost+line, json={'line':self.line})
         self.line = ""
 
     def c_cycle(self):
@@ -88,7 +91,7 @@ class AutoClave:
 
                     if serial_data[index] == 0x0D:
 
-                        self.l_insert()
+                        self.l_insert(self.line_url)
                         self.state = States.save_data_cycle
 
                 if self.state == States.start_cycle:
@@ -99,6 +102,11 @@ class AutoClave:
 
                         self.state = States.save_data_cycle
 
+                    if serial_data[index] == 0xF4:
+
+                        self.line_url = self.insert_line.format(dir="audit",id=str(self.audit_id))
+                        self.state = States.write_log
+
                 if self.state == States.save_data_cycle:
 
                     if serial_data[index] == 0xF2:
@@ -108,6 +116,12 @@ class AutoClave:
 
                     if serial_data[index] == 0xF3:
 
+                        self.line_url = self.insert_line.format(dir="ciclo",id=str(self.ciclo_id))
+                        self.state = States.write_log
+
+                    if serial_data[index] == 0xF4:
+
+                        self.line_url = self.insert_line.format(dir="audit",id=str(self.audit_id))
                         self.state = States.write_log
 
                 if self.state == States.audit:
