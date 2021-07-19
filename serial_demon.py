@@ -29,10 +29,14 @@ class AutoClave:
 
         self.ciclo_id = 0
         self.localhost = "http://127.0.0.1:5000"
+
         self.create_new_cycle = "/ciclo/new"
-        self.insert_line = "/ciclo/{}/insert"
+        self.insert_cycle_line = "/ciclo/{}/insert"
         self.close_cycle = "/ciclo/{}/close"
 
+        self.create_new_audit = "/audit/new"
+        self.insert_audit_line = "/audit/{}/insert"
+        self.close_audit = "/audit/{}/close"
 
     def read_serial(self):
 
@@ -46,6 +50,12 @@ class AutoClave:
 
         print(self.time_byte_array)
         os.system('sudo date -u --set="%s"' % "Tue Nov 13 15:23:34 PDT 2018")
+
+    def create_audit(self):
+
+        response = requests.get(self.localhost+self.create_new_audit)
+        jsonResponse = response.json()
+        self.audit_id = jsonResponse["audit_id"]
 
     def create_ciclo(self):
 
@@ -123,6 +133,7 @@ class AutoClave:
                         index_time = 0
                         print(serial_data)
                         self.config_time()
+                        self.create_audit()
                         self.state = States.start_cycle
 
                 index = index + 1
