@@ -23,23 +23,28 @@ def download_audit_inform(audit_id):
 
 @audit.route("/audit/new")
 def new_audit():
+
+    audit = None
+
     today_query = datetime.utcnow()
-    print(today_query)
-    print(datetime.utcnow())
     today_audit = Audit.query.filter(
       extract('month', Audit.date_created) >= datetime.today().month,
       extract('year', Audit.date_created) >= datetime.today().year,
       extract('day', Audit.date_created) >= datetime.today().day).all()
 
-    print(len(today_audit))
+    if len(today_audit)>0:
 
-    for audit in today_audit:
-        print(audit.name)
+        audit  = Audit.query.filter(
+          extract('month', Audit.date_created) >= datetime.today().month,
+          extract('year', Audit.date_created) >= datetime.today().year,
+          extract('day', Audit.date_created) >= datetime.today().day).first()
 
+    else:
 
-    audit = Audit(name="L"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf",state=0)
-    db.session.add(audit)
-    db.session.commit()
+        audit = Audit(name="L"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf",state=0)
+        db.session.add(audit)
+        db.session.commit()
+
     return jsonify( audit_id = audit.id)
 
 
