@@ -95,7 +95,7 @@ class AutoClave:
                     if serial_data[index] == 0x0D:
 
                         self.l_insert(self.line_url)
-                        self.state = States.save_data_cycle
+                        self.state = self.previous_state
 
                 if self.state == States.start_cycle:
 
@@ -107,6 +107,7 @@ class AutoClave:
                     if serial_data[index] == 0xF4:
 
                         self.line_url = self.insert_line.format(dir="audit",id=str(self.audit_id))
+                        self.previous_state = States.start_cycle
                         self.state = States.write_log
 
                 if self.state == States.save_data_cycle:
@@ -119,11 +120,13 @@ class AutoClave:
                     if serial_data[index] == 0xF3:
 
                         self.line_url = self.insert_line.format(dir="ciclo",id=str(self.ciclo_id))
+                        self.previous_state = States.save_data_cycle
                         self.state = States.write_log
 
                     if serial_data[index] == 0xF4:
 
                         self.line_url = self.insert_line.format(dir="audit",id=str(self.audit_id))
+                        self.previous_state = States.save_data_cycle
                         self.state = States.write_log
 
                 if self.state == States.audit:
