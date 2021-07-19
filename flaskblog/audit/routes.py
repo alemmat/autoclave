@@ -37,7 +37,8 @@ def new_audit():
         audit  = Audit.query.filter(
           extract('month', Audit.date_created) >= datetime.today().month,
           extract('year', Audit.date_created) >= datetime.today().year,
-          extract('day', Audit.date_created) >= datetime.today().day).first()
+          extract('day', Audit.date_created) >= datetime.today().day).
+          order_by(Audit.date_created.desc()).first()
 
     else:
 
@@ -52,6 +53,10 @@ def new_audit():
 def delete_audit(audit_id):
 
     audit = Audit.query.get_or_404(audit_id)
+
+    for line in audit.line:
+        db.session.delete(line)
+        db.session.commit()
 
     if os.path.isfile(path+audit.name):
         os.remove(path+audit.name)
