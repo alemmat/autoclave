@@ -11,7 +11,7 @@ from reportlab.lib.styles import ParagraphStyle
 
 audit = Blueprint('audit', __name__)
 
-path = '/home/jorge/autoclave/flaskblog/static/audits/'
+path = '/home/pi/autoclave/flaskblog/static/audits/'
 
 @audit.route("/download_audit_inform/<int:audit_id>")
 def download_audit_inform(audit_id):
