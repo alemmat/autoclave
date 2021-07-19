@@ -58,6 +58,7 @@ class AutoClave:
         response = requests.get(self.localhost+self.create_new_audit)
         jsonResponse = response.json()
         self.audit_id = jsonResponse["audit_id"]
+        print("create_audit")
         print(self.audit_id)
 
     def create_ciclo(self):
@@ -65,6 +66,7 @@ class AutoClave:
         response = requests.get(self.localhost+self.create_new_cycle)
         jsonResponse = response.json()
         self.ciclo_id = jsonResponse["ciclo_id"]
+        print("create_ciclo")
         print(self.ciclo_id)
 
     def l_insert(self, line):
