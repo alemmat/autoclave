@@ -23,11 +23,16 @@ def download_audit_inform(audit_id):
 
 @audit.route("/audit/new")
 def new_audit():
-    #today_query = datetime.utcnow()
-    #print(today_query)
-    #print(datetime.utcnow())
-    #today_audit = Audit.query.filter(Audit.date_created >= today_query).first() is not None
-    #print(today_audit)
+    today_query = datetime.utcnow()
+    print(today_query)
+    print(datetime.utcnow())
+    today_audit = Audit.query.filter(Audit.date_created >= today_query).all()
+
+    print(len(today_audit))
+
+    for audit in today_audit:
+        print(audit.name)
+
 
     audit = Audit(name="L"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf",state=0)
     db.session.add(audit)
