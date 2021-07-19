@@ -58,12 +58,14 @@ class AutoClave:
         response = requests.get(self.localhost+self.create_new_audit)
         jsonResponse = response.json()
         self.audit_id = jsonResponse["audit_id"]
+        print(self.audit_id)
 
     def create_ciclo(self):
 
         response = requests.get(self.localhost+self.create_new_cycle)
         jsonResponse = response.json()
         self.ciclo_id = jsonResponse["ciclo_id"]
+        print(self.ciclo_id)
 
     def l_insert(self, line):
         response = requests.post(self.localhost+line, json={'line':self.line})
@@ -98,7 +100,6 @@ class AutoClave:
                     if serial_data[index] == 0xF1:
 
                         self.create_ciclo()
-
                         self.state = States.save_data_cycle
 
                     if serial_data[index] == 0xF4:
