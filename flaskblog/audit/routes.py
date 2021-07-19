@@ -2,7 +2,7 @@ from flask import render_template, request, Blueprint, send_file, redirect, url_
 from flask_login import login_user, current_user, logout_user, login_required
 from flaskblog.models import Audit, LineAudit, CompanyData
 from flaskblog import db
-from sqlalchemy import func
+from sqlalchemy import func, extract
 import os
 from datetime import datetime, date, time, timedelta
 from reportlab.pdfgen import canvas
@@ -26,7 +26,10 @@ def new_audit():
     today_query = datetime.utcnow()
     print(today_query)
     print(datetime.utcnow())
-    today_audit = Audit.query.filter(Audit.date_created >= today_query).all()
+    today_audit = Audit.query.filter(
+      extract('month', Audit.date_created) >= datetime.today().month,
+      extract('year', Audit.date_created) >= datetime.today().year,
+      extract('day', Audit.date_created) >= datetime.today().day).all()
 
     print(len(today_audit))
 
