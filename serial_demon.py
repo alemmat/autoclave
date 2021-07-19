@@ -16,8 +16,7 @@ class States(Enum):
     write_log = auto()
     send_ready = auto()
     wait_time_config = auto()
-    audit = auto()
-    cycle  = auto()
+
 
 class AutoClave:
 
