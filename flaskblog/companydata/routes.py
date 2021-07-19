@@ -11,6 +11,7 @@ companydata = Blueprint('companydata', __name__)
 def company_data():
 
     form = UpdateCompanyDataForm()
+    companyData = CompanyData.query.first()
 
     if form.validate_on_submit():
 
