@@ -50,7 +50,7 @@ class AutoClave:
 
     def bcd_to_string(bcd):
 
-        string = ( ( bcd & 0xF0 ) >> 4 ) * 10
+        string = ( ( bcd & 0xF0 ) >> 4 ) *10
 
         return "a"
 
