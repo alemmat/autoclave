@@ -59,15 +59,15 @@ class AutoClave:
 
         time = "20{year}{month}{day} {hour}:{minute}:{seconds}"
 
-        print(time.format( year = self.bcd_to_string( self.time_byte_array[0] ),
+        now = time.format( year = self.bcd_to_string( self.time_byte_array[0] ),
         month = self.bcd_to_string( self.time_byte_array[1] ),
         day = self.bcd_to_string( self.time_byte_array[2] ),
         hour = self.bcd_to_string( self.time_byte_array[3] ),
         minute = self.bcd_to_string( self.time_byte_array[4] ),
-        seconds = self.bcd_to_string( self.time_byte_array[5] ) ) )
+        seconds = self.bcd_to_string( self.time_byte_array[5] ) )
 
 
-        #os.system('sudo date -u --set="%s"' % "Tue Nov 13 15:23:34 PDT 2018")
+        os.system('sudo date -u --set="%s"' % now)
 
     def create_audit(self):
 
