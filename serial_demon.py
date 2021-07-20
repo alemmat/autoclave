@@ -48,7 +48,15 @@ class AutoClave:
         data += self.serial_device.read(data_left)
         return data
 
+    def bcd_to_string(bcd):
+
+        string = ( ( bcd & 0xF0 ) >> 4 ) * 10
+
+        return "a"
+
     def config_time(self):
+
+
 
         print(self.time_byte_array)
         os.system('sudo date -u --set="%s"' % "Tue Nov 13 15:23:34 PDT 2018")
@@ -58,16 +66,13 @@ class AutoClave:
         response = requests.get(self.localhost+self.create_new_audit)
         jsonResponse = response.json()
         self.audit_id = jsonResponse["audit_id"]
-        print("create_audit")
-        print(self.audit_id)
 
     def create_ciclo(self):
 
         response = requests.get(self.localhost+self.create_new_cycle)
         jsonResponse = response.json()
         self.ciclo_id = jsonResponse["ciclo_id"]
-        print("create_ciclo")
-        print(self.ciclo_id)
+
 
     def l_insert(self, line):
         response = requests.post(self.localhost+line, json={'line':self.line})
@@ -136,9 +141,6 @@ class AutoClave:
                         self.previous_state = States.save_data_cycle
                         self.state = States.write_log
 
-                if self.state == States.audit:
-
-                    self.state = States.start_cycle
 
                 if self.state == States.wait_time_config:
 
@@ -157,7 +159,6 @@ class AutoClave:
                     if index_time > 6:
 
                         index_time = 0
-                        print(serial_data)
                         self.config_time()
                         self.create_audit()
                         self.state = States.start_cycle
