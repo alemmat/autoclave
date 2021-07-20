@@ -110,6 +110,13 @@ class AutoClave:
                         self.previous_state = States.start_cycle
                         self.state = States.write_log
 
+                    if serial_data[index] == 0xF3:
+
+                        self.create_ciclo()
+                        self.line_url = self.insert_line.format(dir="ciclo",id=str(self.ciclo_id))
+                        self.previous_state = States.save_data_cycle
+                        self.state = States.write_log
+
                 if self.state == States.save_data_cycle:
 
                     if serial_data[index] == 0xF2:
