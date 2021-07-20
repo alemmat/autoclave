@@ -48,17 +48,16 @@ class AutoClave:
         data += self.serial_device.read(data_left)
         return data
 
-    def bcd_to_string(bcd):
+    def bcd_to_string(self,bcd):
 
-        string = ( ( bcd & 0xF0 ) >> 4 ) *10
+        string = ( ( bcd & 0xF0 ) >> 4 ) * 10
+        string = string + (bcd & 0x0F)
 
-        return "a"
+        return string
 
     def config_time(self):
 
 
-
-        print(self.time_byte_array)
         os.system('sudo date -u --set="%s"' % "Tue Nov 13 15:23:34 PDT 2018")
 
     def create_audit(self):
