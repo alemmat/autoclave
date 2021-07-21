@@ -37,7 +37,7 @@ class AutoClave:
 
         self.create_new_audit = "/audit/new"
         self.insert_audit_line = "/audit/{}/insert"
-        self.close_audit = "/audit/{}/close"
+        self.close_audit = "/audit/close"
 
     def read_serial(self):
 
@@ -87,6 +87,9 @@ class AutoClave:
 
     def c_cycle(self):
         requests.get(self.localhost+self.close_cycle.format(str(self.ciclo_id)))
+
+    def c_audit(self):
+        requests.get(self.localhost+self.close_audit)
 
     def state_machine(self):
 
@@ -167,6 +170,7 @@ class AutoClave:
                         index_time = 0
                         self.config_time()
                         time.sleep(10)
+                        self.c_audit()
                         self.create_audit()
                         self.state = States.start_cycle
 
