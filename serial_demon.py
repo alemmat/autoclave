@@ -148,7 +148,6 @@ class AutoClave:
                         self.previous_state = States.save_data_cycle
                         self.state = States.write_log
 
-
                 if self.state == States.wait_time_config:
 
                     if serial_data[index] == 0xF8:
@@ -167,6 +166,7 @@ class AutoClave:
 
                         index_time = 0
                         self.config_time()
+                        time.sleep(10)
                         self.create_audit()
                         self.state = States.start_cycle
 
