@@ -47,12 +47,12 @@ class AutoClave:
         data += self.serial_device.read(data_left)
         return data
 
-    def bcd_to_string(self,bcd):
+    def bcd_to_int(self,bcd):
 
-        number = ( ( bcd & 0xF0 ) >> 4 ) * 10
-        number = number + (bcd & 0x0F)
+        final_number = ( ( bcd & 0xF0 ) >> 4 ) * 10
+        final_number = final_number + (bcd & 0x0F)
 
-        return string
+        return final_number
 
     def config_time(self):
 
