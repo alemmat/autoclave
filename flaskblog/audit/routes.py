@@ -83,7 +83,7 @@ def insert_line(audit_id):
     return "ok"
 
 @audit.route("/audit/close")
-def close_audit(audit_id):
+def close_audit():
 
     audits = Audit.query.filter(
       datetime.today().month > extract('month', Audit.date_created),
