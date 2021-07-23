@@ -91,6 +91,8 @@ def close_audit():
       datetime.today().day > extract('day', Audit.date_created),
       Audit.state == 0).all()
 
+     print(len(audits))
+
     for audit in audits:
 
         if audit.state == 0:
