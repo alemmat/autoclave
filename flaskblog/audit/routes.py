@@ -84,6 +84,24 @@ def insert_line(audit_id):
 
 @audit.route("/audit/close")
 def close_audit():
+
     audits = Audit.query.filter(Audit.date_created <= datetime.now().strftime('%Y-%m-%d'), Audit.state == 0).all()
+
+    for audit in audits:
+
+        audit.state = 1
+        db.session.commit()
+
+        c = canvas.Canvas(path+audit.name)
+        textobject = c.beginText()
+        textobject.setTextOrigin(cm, 28.7*cm)
+
+        for lin in audit.line:
+            textobject.textLine(lin.string.replace("\n","").replace("\r",""))
+
+        ps = ParagraphStyle(textobject, leading=6)
+        c.drawText(textobject)
+        c.save()
+
 
     return "ok"
