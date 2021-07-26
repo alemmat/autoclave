@@ -87,6 +87,8 @@ def close_audit():
 
     audits = Audit.query.filter(Audit.date_created <= datetime.now().strftime('%Y-%m-%d'), Audit.state == 0).all()
 
+    print(len(audits))
+
     for audit in audits:
 
         audit.state = 1
