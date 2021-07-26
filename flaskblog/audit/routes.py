@@ -47,7 +47,9 @@ def delete_audit(audit_id):
 
     audit = Audit.query.get_or_404(audit_id)
 
-    for line in audit.line:
+    lines = LineAudit.query.filter(LineAudit.audit_id == audit_id).all()
+
+    for line in lines:
         db.session.delete(line)
         db.session.commit()
 
