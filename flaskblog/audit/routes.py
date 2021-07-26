@@ -27,18 +27,11 @@ def new_audit():
     audit = None
 
     today_query = datetime.utcnow()
-    today_audit = Audit.query.filter(
-      extract('month', Audit.date_created) >= datetime.today().month,
-      extract('year', Audit.date_created) >= datetime.today().year,
-      extract('day', Audit.date_created) >= datetime.today().day,
-      Audit.state == 0).all()
+    today_audit = Audit.query.filter(Audit.date_created >= datetime.now().strftime('%Y-%m-%d')).all()
 
     if len(today_audit)>0:
 
-        audit  = Audit.query.filter(
-          extract('month', Audit.date_created) >= datetime.today().month,
-          extract('year', Audit.date_created) >= datetime.today().year,
-          extract('day', Audit.date_created) >= datetime.today().day,
+        audit  = Audit.query.filter(Audit.date_created >= datetime.now().strftime('%Y-%m-%d'),
           Audit.state == 0).order_by(Audit.date_created.desc()).first()
 
     else:
