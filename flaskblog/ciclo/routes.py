@@ -27,6 +27,12 @@ def download_cycle_inform(ciclo_id):
 @login_required
 def delete_ciclo(ciclo_id):
 
+    lines = LineCycle.query.filter(LineCycle.cycle_id == ciclo_id).all()
+
+    for line in lines:
+        db.session.delete(line)
+        db.session.commit()
+
     ciclo = Cycle.query.get_or_404(ciclo_id)
 
     if os.path.isfile(path+ciclo.name):

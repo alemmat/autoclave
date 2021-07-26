@@ -45,8 +45,6 @@ def new_audit():
 @audit.route("/audit/<int:audit_id>/delete", methods=['POST'])
 def delete_audit(audit_id):
 
-    audit = Audit.query.get_or_404(audit_id)
-
     lines = LineAudit.query.filter(LineAudit.audit_id == audit_id).all()
 
     for line in lines:
@@ -56,8 +54,10 @@ def delete_audit(audit_id):
     if os.path.isfile(path+audit.name):
         os.remove(path+audit.name)
 
+    audit = Audit.query.get_or_404(audit_id)
     db.session.delete(audit)
     db.session.commit()
+    
     return redirect(url_for('audit.show_all_audit'))
 
 @audit.route("/audit")
