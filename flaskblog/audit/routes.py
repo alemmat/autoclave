@@ -31,8 +31,7 @@ def new_audit():
 
     if len(today_audit)>0:
 
-        audit  = Audit.query.filter(Audit.date_created >= datetime.now().strftime('%Y-%m-%d'), Audit.state == 0)
-        .order_by(Audit.date_created.desc()).first()
+        audit  = Audit.query.filter(Audit.date_created >= datetime.now().strftime('%Y-%m-%d'), Audit.state == 0).order_by(Audit.date_created.desc()).first()
 
     else:
 
