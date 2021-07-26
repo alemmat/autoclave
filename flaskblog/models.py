@@ -12,20 +12,21 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
+    log = db.relationship('Log', backref='user', lazy=True)
 
 class Cycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     state = db.Column(db.Integer, nullable=False)
-    line = db.relationship('LineCycle', backref='line', lazy=True)
+    line = db.relationship('LineCycle', backref='cycle', lazy=True)
 
 class Audit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     state = db.Column(db.Integer, nullable=False)
-    line = db.relationship('LineAudit', backref='line', lazy=True)
+    line = db.relationship('LineAudit', backref='audit', lazy=True)
 
 class LineCycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -42,3 +43,8 @@ class CompanyData(db.Model):
     companyname = db.Column(db.String(100), nullable=False)
     devicedesignation = db.Column(db.String(100), nullable=False)
     ip = db.Column(db.String(100), nullable=False)
+
+class Log(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
