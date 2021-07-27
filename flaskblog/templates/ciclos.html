@@ -1,6 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
 
+<div class="content-section">
+
+  <legend class="border-bottom mb-4">Ciclos</legend>
+
     <table>
       <tr>
         <th>ARCHIVOS</th>
@@ -52,6 +56,8 @@
         ...
       {% endif %}
     {% endfor %}
+
+    <div>
 
     <!-- Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true" id="deletemodal">
