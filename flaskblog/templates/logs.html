@@ -1,40 +1,26 @@
 {% extends "layout.html" %}
 {% block content %}
 
-    <table>
-      <tr>
-        <th>ARCHIVOS</th>
+<div class="content-section">
 
-      </tr>
+  <legend class="border-bottom mb-4">Logs</legend>
 
-      {% for log in logs.items %}
-        <tr>
-            <td> El usuario {{ log.user.username }} se logueo el {{ log.date_created.strftime('%Y-%m-%d %H:%M') }}
+  {% for log in logs.items %}
+      <p>El usuario {{ log.user.username }} se logueo el {{ log.date_created.strftime('%Y-%m-%d %H:%M') }}</p>
+  {% endfor %}
 
-            </td>
-        </tr>
-      {% endfor %}
-    </table>
-
-    <br>
-
-    {% for page_num in logs.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-      {% if page_num %}
-        {% if logs.page == page_num %}
-          <a class="btn btn-info mb-4" href="{{ url_for('log.all', page=page_num) }}">{{ page_num }}</a>
-        {% else %}
-          <a class="btn btn-outline-info mb-4" href="{{ url_for('log.all', page=page_num) }}">{{ page_num }}</a>
-        {% endif %}
+  {% for page_num in logs.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+    {% if page_num %}
+      {% if logs.page == page_num %}
+        <a class="btn btn-info mb-4" href="{{ url_for('log.all', page=page_num) }}">{{ page_num }}</a>
       {% else %}
-        ...
+        <a class="btn btn-outline-info mb-4" href="{{ url_for('log.all', page=page_num) }}">{{ page_num }}</a>
       {% endif %}
-    {% endfor %}
+    {% else %}
+      ...
+    {% endif %}
+  {% endfor %}
 
+</div>
 
-
-
-    <script>
-
-
-    </script>
 {% endblock content %}
