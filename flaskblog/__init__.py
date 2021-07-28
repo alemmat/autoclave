@@ -18,7 +18,7 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(Config)
     app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://{username}:{password}@{server}:3306/db_autoclave".format(username = "user", password = "123", server = "127.0.0.1")
 
 
     db.init_app(app)
