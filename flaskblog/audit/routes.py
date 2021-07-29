@@ -14,6 +14,7 @@ audit = Blueprint('audit', __name__)
 path = '/home/pi/autoclave/flaskblog/static/audits/'
 
 @audit.route("/download_audit_inform/<int:audit_id>")
+@login_required
 def download_audit_inform(audit_id):
     audit = Audit.query.get_or_404(audit_id)
     if os.path.isfile(path+audit.name):
@@ -43,6 +44,7 @@ def new_audit():
 
 
 @audit.route("/audit/<int:audit_id>/delete", methods=['POST'])
+@login_required
 def delete_audit(audit_id):
 
     lines = LineAudit.query.filter(LineAudit.audit_id == audit_id).all()
@@ -57,10 +59,11 @@ def delete_audit(audit_id):
     audit = Audit.query.get_or_404(audit_id)
     db.session.delete(audit)
     db.session.commit()
-    
+
     return redirect(url_for('audit.show_all_audit'))
 
 @audit.route("/audit")
+@login_required
 def show_all_audit():
     companyData = CompanyData.query.first()
     page = request.args.get('page', 1, type=int)
@@ -74,7 +77,7 @@ def insert_line(audit_id):
     line = LineAudit(string = line_json["line"],audit_id=audit_id)
     db.session.add(line)
     db.session.commit()
-    return "ok"
+    return jsonify( audit_id = audit.id)
 
 @audit.route("/audit/close")
 def close_audit():
