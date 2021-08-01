@@ -21,7 +21,7 @@ class AutoClave:
 
     def __init__(self):
 
-        self.serial_device = serial.Serial('/dev/ttyAMA0',baudrate=9600)
+        self.serial_device = serial.Serial('/dev/ttyACM0')
         self.state = States.wait_time_config
         self.line = ""
         self.time_byte_array = bytearray()
