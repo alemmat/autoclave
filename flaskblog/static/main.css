@@ -45,11 +45,7 @@ a.article-title:hover {
   white-space: pre-line;
 }
 
-.article-img {
-  height: 65px;
-  width: 65px;
-  margin-right: 16px;
-}
+
 
 .article-metadata {
   padding-bottom: 1px;
@@ -62,18 +58,9 @@ a.article-title:hover {
   text-decoration: none;
 }
 
-.article-svg {
-  width: 25px;
-  height: 25px;
-  vertical-align: middle;
-}
 
-.account-img {
-  height: 125px;
-  width: 125px;
-  margin-right: 20px;
-  margin-bottom: 16px;
-}
+
+
 
 .account-heading {
   font-size: 2.5rem;
@@ -95,20 +82,28 @@ a.article-title:hover {
   padding: 6px 8px 6px 16px;
   text-decoration: none;
   font-size: 20px;
-  color: #5f788a;;
+  color: #5f788a;
   display: block;
 }
 
-
-
 table {
+
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 75%;
 }
 
 td, th {
+
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
+}
+
+.autoclave-landing{
+
+  color: #5f788a;
+  display: block;
+  font-size: 40px;
+  padding-top: 50px;
 }
