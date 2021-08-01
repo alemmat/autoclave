@@ -10,7 +10,6 @@ class States(Enum):
 
     start_cycle = auto()
     save_data_cycle = auto()
-    audit = auto()
     set_time = auto()
     write_log = auto()
     send_ready = auto()
