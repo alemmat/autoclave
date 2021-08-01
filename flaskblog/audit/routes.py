@@ -47,7 +47,7 @@ def new_audit():
 @login_required
 def delete_audit(audit_id):
 
-    lines = LineAudit.query.filter(LineAudit.audit_id == audit_id).filter(LineAudit.date_created <= datetime.now().strftime('%Y-%m-%d')).filter(LineAudit.date_created >= datetime.now().strftime('%Y-%m-%d')).all()
+    lines = LineAudit.query.filter(LineAudit.audit_id == audit_id).all()
 
     for line in lines:
         db.session.delete(line)
@@ -73,7 +73,12 @@ def show_all_audit():
 @audit.route("/audit/<int:audit_id>/insert", methods=['POST'])
 def insert_line(audit_id):
 
-    audits = Audit.query.filter(Audit.id == audit_id, Audit.state == 0).all()
+    start = datetime.now()
+    end = datetime.now() + timedelta(days=1)
+
+
+    audits = Audit.query.filter(Audit.id == audit_id, Audit.state == 0).
+    filter(LineAudit.date_created < end.strftime('%Y-%m-%d')).filter(LineAudit.date_created >= start.strftime('%Y-%m-%d')).all()
 
     print(len(audits))
 
