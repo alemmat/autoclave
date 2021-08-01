@@ -72,6 +72,9 @@ def show_all_audit():
 
 @audit.route("/audit/<int:audit_id>/insert", methods=['POST'])
 def insert_line(audit_id):
+
+    audits = Audit.query.filter(Audit.id == audit_id, Audit.state == 0).all()
+    print(len(audits))
     audit = Audit.query.get_or_404(audit_id)
     line_json = request.json
     line = LineAudit(string = line_json["line"],audit_id=audit_id)
