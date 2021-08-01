@@ -66,7 +66,7 @@ def insert_line(ciclo_id):
     line = LineCycle(string = line_json["line"],cycle_id=ciclo_id)
     db.session.add(line)
     db.session.commit()
-    return "ok"
+    return jsonify( ciclo_id = ciclo_id)
 
 
 @ciclo.route("/ciclo/<int:ciclo_id>/close")

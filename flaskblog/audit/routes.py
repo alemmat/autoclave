@@ -74,13 +74,21 @@ def show_all_audit():
 def insert_line(audit_id):
 
     audits = Audit.query.filter(Audit.id == audit_id, Audit.state == 0).all()
+
     print(len(audits))
-    audit = Audit.query.get_or_404(audit_id)
+
+    if len(audits) == 0:
+
+        audit = Audit(name="L"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf",state=0)
+        db.session.add(audit)
+        db.session.commit()
+        audit_id = audit.id
+
     line_json = request.json
-    line = LineAudit(string = line_json["line"],audit_id=audit_id)
+    line = LineAudit(string = line_json["line"], audit_id=audit_id)
     db.session.add(line)
     db.session.commit()
-    return jsonify( audit_id = audit.id)
+    return jsonify( audit_id = audit_id)
 
 @audit.route("/audit/close")
 def close_audit():

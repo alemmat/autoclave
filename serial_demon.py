@@ -15,6 +15,8 @@ class States(Enum):
     write_log = auto()
     send_ready = auto()
     wait_time_config = auto()
+    audit = auto()
+    cycle = auto()
 
 
 class AutoClave:
@@ -23,6 +25,7 @@ class AutoClave:
 
         self.serial_device = serial.Serial('/dev/ttyACM0')
         self.state = States.start_cycle
+        self.line_url_state = States.audit
         self.line = ""
         self.time_byte_array = bytearray()
         self.path = '/home/pi/autoclave/flaskblog/static/ciclos/'
@@ -81,8 +84,16 @@ class AutoClave:
         self.ciclo_id = jsonResponse["ciclo_id"]
 
 
-    def l_insert(self, line):
-        response = requests.post(self.localhost+line, json={'line':self.line})
+    def l_insert(self, url):
+        response = requests.post(self.localhost+url, json={'line':self.line})
+        jsonResponse = response.json()
+
+        if self.line_url_state == States.audit:
+            self.audit_id = jsonResponse["audit_id"]
+
+        if self.line_url_state == States.cycle:
+            self.ciclo_id = jsonResponse["ciclo_id"]
+
         self.line = ""
 
     def c_cycle(self):
@@ -122,6 +133,7 @@ class AutoClave:
                     if serial_data[index] == 0xF4:
 
                         self.line_url = self.insert_line.format(dir="audit",id=str(self.audit_id))
+                        self.line_url_state = States.audit
                         self.previous_state = States.start_cycle
                         self.state = States.write_log
 
@@ -129,6 +141,7 @@ class AutoClave:
 
                         self.create_ciclo()
                         self.line_url = self.insert_line.format(dir="ciclo",id=str(self.ciclo_id))
+                        self.line_url_state = States.cycle
                         self.previous_state = States.save_data_cycle
                         self.state = States.write_log
 
@@ -142,12 +155,14 @@ class AutoClave:
                     if serial_data[index] == 0xF3:
 
                         self.line_url = self.insert_line.format(dir="ciclo",id=str(self.ciclo_id))
+                        self.line_url_state = States.cycle
                         self.previous_state = States.save_data_cycle
                         self.state = States.write_log
 
                     if serial_data[index] == 0xF4:
 
                         self.line_url = self.insert_line.format(dir="audit",id=str(self.audit_id))
+                        self.line_url_state = States.audit
                         self.previous_state = States.save_data_cycle
                         self.state = States.write_log
 
