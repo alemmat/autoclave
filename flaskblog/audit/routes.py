@@ -47,7 +47,7 @@ def new_audit():
 @login_required
 def delete_audit(audit_id):
 
-    lines = LineAudit.query.filter(LineAudit.audit_id == audit_id).all()
+    lines = LineAudit.query.filter(LineAudit.audit_id == audit_id).filter(LineAudit.date_created <= datetime.now().strftime('%Y-%m-%d')).filter(LineAudit.date_created >= datetime.now().strftime('%Y-%m-%d')).all()
 
     for line in lines:
         db.session.delete(line)
