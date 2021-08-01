@@ -77,7 +77,7 @@ def insert_line(audit_id):
     end = datetime.now() + timedelta(days=1)
 
 
-    audits = Audit.query.filter(Audit.id == audit_id, Audit.state == 0).filter(LineAudit.date_created < end.strftime('%Y-%m-%d')).filter(LineAudit.date_created >= start.strftime('%Y-%m-%d')).all()
+    audits = Audit.query.filter(Audit.id == audit_id, Audit.state == 0).filter(Audit.date_created < end.strftime('%Y-%m-%d')).filter(Audit.date_created >= start.strftime('%Y-%m-%d')).all()
 
     print(len(audits))
 
