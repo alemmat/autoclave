@@ -102,8 +102,7 @@ td, th {
 
 .autoclave-landing{
 
-  color: #5f788a;
-  display: block;
-  font-size: 40px;
-  padding-top: 50px;
+
+  width: 75%;
+  length: 75%;
 }
