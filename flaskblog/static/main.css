@@ -100,8 +100,6 @@ td, th {
   padding: 8px;
 }
 
-.autoclave-landing{
-
-  width: 75%;
-  length: 75%;
+.padding-button-landing{
+  margin: 1% 1% 2% 2%;  
 }
