@@ -16,6 +16,7 @@ class States(Enum):
     wait_time_config = auto()
     audit = auto()
     cycle = auto()
+    test = auto()
 
 
 class AutoClave:
@@ -23,7 +24,7 @@ class AutoClave:
     def __init__(self):
 
         self.serial_device = serial.Serial('/dev/ttyACM0')
-        self.state = States.start_cycle
+        self.state = States.set_time
         self.line_url_state = States.audit
         self.line = ""
         self.time_byte_array = bytearray()
@@ -170,6 +171,11 @@ class AutoClave:
                     if serial_data[index] == 0xF8:
 
                         self.state = States.set_time
+
+                if self.state == States.test:
+                    self.c_audit()
+                    self.create_audit()
+                    self.state = States.start_cycle
 
                 if self.state == States.set_time:
 
