@@ -45,8 +45,6 @@ a.article-title:hover {
   white-space: pre-line;
 }
 
-
-
 .article-metadata {
   padding-bottom: 1px;
   margin-bottom: 4px;
@@ -57,10 +55,6 @@ a.article-title:hover {
   color: #333;
   text-decoration: none;
 }
-
-
-
-
 
 .account-heading {
   font-size: 2.5rem;
@@ -90,7 +84,7 @@ table {
 
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  width: 75%;
+  
 }
 
 td, th {
