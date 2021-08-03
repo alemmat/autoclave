@@ -90,3 +90,29 @@ def close_cycle(ciclo_id):
         c.save()
 
     return "ok"
+
+
+@ciclo.route("/ciclo/coc")
+def close_open_cycle():
+
+    cycles = Cycle.query.filter(Cycle.state == 0).all()
+
+    for cycle in cycles:
+
+        c = canvas.Canvas(path+ciclo.name)
+        textobject = c.beginText()
+        textobject.setTextOrigin(cm, 28.7*cm)
+
+        for lin in ciclo.line:
+            textobject.textLine(lin.string.replace("\n","").replace("\r",""))
+
+        textobject.textLine("CICLO INTERRUMPIDO POR CORTE DE LUZ")
+
+        ps = ParagraphStyle(textobject, leading=6)
+        c.drawText(textobject)
+        c.save()
+
+        ciclo.state = 1
+        db.session.commit()
+
+    return "ok"

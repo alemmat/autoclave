@@ -37,6 +37,7 @@ class AutoClave:
         self.create_new_cycle = "/ciclo/new"
         self.insert_line = "/{dir}/{id}/insert"
         self.close_cycle = "/ciclo/{}/close"
+        self.coc = "/ciclo/coc"
 
         self.create_new_audit = "/audit/new"
         self.insert_audit_line = "/audit/{}/insert"
@@ -98,6 +99,9 @@ class AutoClave:
 
     def c_cycle(self):
         requests.get(self.localhost+self.close_cycle.format(str(self.ciclo_id)))
+
+    def close_open_cycle(self):
+        requests.get(self.close_open_cycle)
 
     def c_audit(self):
         requests.get(self.localhost+self.close_audit)
