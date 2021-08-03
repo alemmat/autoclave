@@ -97,6 +97,8 @@ def close_open_cycle():
 
     cycles = Cycle.query.filter(Cycle.state == 0).all()
 
+    print(len(cycles))
+
     for cycle in cycles:
 
         c = canvas.Canvas(path+ciclo.name)
