@@ -105,7 +105,7 @@ def close_open_cycle():
         textobject = c.beginText()
         textobject.setTextOrigin(cm, 28.7*cm)
 
-        for lin in ciclo.line:
+        for lin in cycle.line:
             textobject.textLine(lin.string.replace("\n","").replace("\r",""))
 
         textobject.textLine("CICLO INTERRUMPIDO POR CORTE DE LUZ")
