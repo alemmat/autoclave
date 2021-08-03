@@ -114,7 +114,7 @@ def close_open_cycle():
         c.drawText(textobject)
         c.save()
 
-        ciclo.state = 1
+        cycle.state = 1
         db.session.commit()
 
     return "ok"
