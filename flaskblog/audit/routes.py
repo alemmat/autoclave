@@ -11,7 +11,7 @@ from reportlab.lib.styles import ParagraphStyle
 
 audit = Blueprint('audit', __name__)
 
-path = '/home/pi/autoclave/flaskblog/static/audits/'
+path = '/home/jorge/autoclave/flaskblog/static/audits/'
 
 @audit.route("/download_audit_inform/<int:audit_id>")
 @login_required
@@ -68,7 +68,7 @@ def show_all_audit():
     companyData = CompanyData.query.first()
     page = request.args.get('page', 1, type=int)
     audits = Audit.query.order_by(Audit.date_created.desc()).paginate(page=page, per_page=10)
-    return render_template('audits.html', audits=audits, companydata = companyData)
+    return render_template('audits.html', audits=audits, companydata = companyData, title='Auditorias')
 
 @audit.route("/audit/<int:audit_id>/insert", methods=['POST'])
 def insert_line(audit_id):

@@ -28,19 +28,18 @@ class AutoClave:
         self.line_url_state = States.audit
         self.line = ""
         self.time_byte_array = bytearray()
-        self.path = '/home/pi/autoclave/flaskblog/static/ciclos/'
+
 
         self.ciclo_id = 0
         self.audit_id = 0
         self.localhost = "http://127.0.0.1:5000"
 
         self.create_new_cycle = "/ciclo/new"
-        self.insert_line = "/{dir}/{id}/insert"
+        self.var_insert_line = "/{dir}/{id}/insert"
         self.close_cycle = "/ciclo/{}/close"
-        self.coc = "/ciclo/coc"
+        self.var_close_open_cycle = "/ciclo/coc"
 
         self.create_new_audit = "/audit/new"
-        self.insert_audit_line = "/audit/{}/insert"
         self.close_audit = "/audit/close"
 
     def read_serial(self):
@@ -85,7 +84,7 @@ class AutoClave:
         self.ciclo_id = jsonResponse["ciclo_id"]
 
 
-    def l_insert(self, url):
+    def fun_insert_line(self, url):
         response = requests.post(self.localhost+url, json={'line':self.line})
         jsonResponse = response.json()
 
@@ -97,13 +96,13 @@ class AutoClave:
 
         self.line = ""
 
-    def c_cycle(self):
+    def fun_close_cycle(self):
         requests.get(self.localhost+self.close_cycle.format(str(self.ciclo_id)))
 
-    def close_open_cycle(self):
-        requests.get(self.close_open_cycle)
+    def fun_close_open_cycle(self):
+        requests.get(self.localhost+self.var_close_open_cycle)
 
-    def c_audit(self):
+    def fun_close_audit(self):
         requests.get(self.localhost+self.close_audit)
 
     def state_machine(self):
@@ -124,7 +123,7 @@ class AutoClave:
 
                     if serial_data[index] == 0x0D:
 
-                        self.l_insert(self.line_url)
+                        self.fun_insert_line(self.line_url)
                         self.state = self.previous_state
 
                 if self.state == States.start_cycle:
@@ -136,7 +135,7 @@ class AutoClave:
 
                     if serial_data[index] == 0xF4:
 
-                        self.line_url = self.insert_line.format(dir="audit",id=str(self.audit_id))
+                        self.line_url = self.var_insert_line.format(dir="audit",id=str(self.audit_id))
                         self.line_url_state = States.audit
                         self.previous_state = States.start_cycle
                         self.state = States.write_log
@@ -144,7 +143,7 @@ class AutoClave:
                     if serial_data[index] == 0xF3:
 
                         self.create_ciclo()
-                        self.line_url = self.insert_line.format(dir="ciclo",id=str(self.ciclo_id))
+                        self.line_url = self.var_insert_line.format(dir="ciclo",id=str(self.ciclo_id))
                         self.line_url_state = States.cycle
                         self.previous_state = States.save_data_cycle
                         self.state = States.write_log
@@ -153,19 +152,19 @@ class AutoClave:
 
                     if serial_data[index] == 0xF2:
 
-                        self.c_cycle()
+                        self.fun_close_cycle()
                         self.state = States.start_cycle
 
                     if serial_data[index] == 0xF3:
 
-                        self.line_url = self.insert_line.format(dir="ciclo",id=str(self.ciclo_id))
+                        self.line_url = self.var_insert_line.format(dir="ciclo",id=str(self.ciclo_id))
                         self.line_url_state = States.cycle
                         self.previous_state = States.save_data_cycle
                         self.state = States.write_log
 
                     if serial_data[index] == 0xF4:
 
-                        self.line_url = self.insert_line.format(dir="audit",id=str(self.audit_id))
+                        self.line_url = self.var_insert_line.format(dir="audit",id=str(self.audit_id))
                         self.line_url_state = States.audit
                         self.previous_state = States.save_data_cycle
                         self.state = States.write_log
@@ -177,8 +176,9 @@ class AutoClave:
                         self.state = States.set_time
 
                 if self.state == States.test:
-                    self.c_audit()
+                    self.fun_close_audit()
                     self.create_audit()
+                    self.fun_close_open_cycle()
                     self.state = States.start_cycle
 
                 if self.state == States.set_time:
@@ -194,7 +194,7 @@ class AutoClave:
                         index_time = 0
                         self.config_time()
                         time.sleep(10)
-                        self.c_audit()
+                        self.fun_close_audit()
                         self.create_audit()
                         self.state = States.start_cycle
 

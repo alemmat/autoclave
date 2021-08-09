@@ -13,4 +13,4 @@ def all():
     companyData = CompanyData.query.first()
     page = request.args.get('page', 1, type=int)
     logs = Log.query.order_by(Log.date_created.desc()).paginate(page=page, per_page=10)
-    return render_template('logs.html', logs=logs, companydata = companyData,title='Logs')
+    return render_template('logs.html', logs=logs, companydata = companyData, title='Logs')

@@ -10,7 +10,7 @@ from reportlab.lib.styles import ParagraphStyle
 
 ciclo = Blueprint('ciclo', __name__)
 
-path = '/home/pi/autoclave/flaskblog/static/ciclos/'
+path = '/home/jorge/autoclave/flaskblog/static/ciclos/'
 
 @ciclo.route("/download_cycle_inform/<int:ciclo_id>")
 @login_required
@@ -48,7 +48,7 @@ def show_all_ciclo():
     companyData = CompanyData.query.first()
     page = request.args.get('page', 1, type=int)
     ciclos = Cycle.query.order_by(Cycle.date_created.desc()).paginate(page=page, per_page=10)
-    return render_template('ciclos.html', ciclos=ciclos, companydata = companyData)
+    return render_template('ciclos.html', ciclos=ciclos, companydata = companyData, title='Ciclos')
 
 @ciclo.route("/ciclo/new")
 
@@ -101,7 +101,7 @@ def close_open_cycle():
 
     for cycle in cycles:
 
-        c = canvas.Canvas(path+ciclo.name)
+        c = canvas.Canvas(path+cycle.name)
         textobject = c.beginText()
         textobject.setTextOrigin(cm, 28.7*cm)
 
