@@ -99,6 +99,10 @@ class AutoClave:
     def fun_close_cycle(self):
         requests.get(self.localhost+self.close_cycle.format(str(self.ciclo_id)))
 
+    def notify_power_up(self):
+        self.serial_device.write(0xF8)
+        self.serial_device.write(0xF3)
+
     def fun_close_open_cycle(self):
         requests.get(self.localhost+self.var_close_open_cycle)
 

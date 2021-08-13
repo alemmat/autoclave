@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+from flask import render_template, url_for, flash, redirect, request, Blueprint, session
 from flask_login import login_user, current_user, logout_user, login_required
 from flaskblog import db, bcrypt
 from flaskblog.models import User,CompanyData, Log
@@ -39,13 +39,14 @@ def register():
 @users.route("/login", methods=['GET', 'POST'])
 def login():
     companyData = CompanyData.query.first()
+    session.permanent = True
     if current_user.is_authenticated:
         return redirect(url_for('ciclo.show_all_ciclo'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            
+
             log = Log(user_id=user.id)
             db.session.add(log)
             db.session.commit()

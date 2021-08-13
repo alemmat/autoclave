@@ -54,38 +54,40 @@
       </nav>
     </header>
 
-    <main role="main" style="height: 100%;">
+    <main role="main" class="container">
 
-      <div class="row" style="height: 50%;">
+      <div class="row" style="height:50%">
 
-        <div class="col-md-4">
+        <div class="col-md-6">
 
-          <button class="btn btn-outline-info btn-lg btn-block" style="padding: 10px 10px 10px 10px;"  href="{{ url_for('ciclo.show_all_ciclo') }}">Ciclos</button>
-        </div>
-
-        <div class="col-md-4">
-          <button class="btn btn-outline-info btn-lg btn-block" href="{{ url_for('audit.show_all_audit') }}">Auditoría</button>
-        </div>
-
-        <div class="col-md-4">
-            <button class="btn btn-outline-info btn-lg btn-block" href="{{ url_for('companydata.company_data') }}">Configuración</button>
-        </div>
-      </div>
-
-      <div class="row" style="height: 50%;">
-
-        <div class="col-md-4">
-            <button class="btn btn-outline-info btn-lg btn-block" href="{{ url_for('log.all') }}">Log</button>
-        </div>
-
-        <div class="col-md-4">
+          <a class="btn btn-outline-info my-a" href="{{ url_for('ciclo.show_all_ciclo') }}">Ciclos</a>
 
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
+
+            <a class="btn btn-outline-info my-a" href="{{ url_for('audit.show_all_audit') }}">Auditoría</a>
 
         </div>
       </div>
+
+      <div class="row" style="height:50%">
+
+        <div class="col-md-6">
+
+          <a class="btn btn-outline-info my-a" href="{{ url_for('companydata.company_data') }}">Configuración</a>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <a class="btn btn-outline-info my-a" href="{{ url_for('log.all') }}">Log</a>
+
+        </div>
+      </div>
+
+
+
     </main>
 
 </body>
