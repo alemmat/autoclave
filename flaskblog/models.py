@@ -20,6 +20,8 @@ class Cycle(db.Model):
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     state = db.Column(db.Integer, nullable=False)
     line = db.relationship('LineCycle', backref='cycle', lazy=True)
+    temp = db.relationship('TempCycle', backref='cycle', lazy=True)
+    pressure = db.relationship('PressureCycle', backref='cycle', lazy=True)
 
 class Audit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -29,6 +31,16 @@ class Audit(db.Model):
     line = db.relationship('LineAudit', backref='audit', lazy=True)
 
 class LineCycle(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    string = db.Column(db.String(100), nullable=False)
+    cycle_id = db.Column(db.Integer, db.ForeignKey('cycle.id'), nullable=False)
+
+class TempCycle(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    string = db.Column(db.String(100), nullable=False)
+    cycle_id = db.Column(db.Integer, db.ForeignKey('cycle.id'), nullable=False)
+
+class PressureCycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     string = db.Column(db.String(100), nullable=False)
     cycle_id = db.Column(db.Integer, db.ForeignKey('cycle.id'), nullable=False)

@@ -4,6 +4,9 @@ from flaskblog import db
 from flaskblog.models import CompanyData
 from flaskblog.companydata.forms import UpdateCompanyDataForm
 
+from flaskblog.companydata.configip import config_ip
+
+
 companydata = Blueprint('companydata', __name__)
 
 @companydata.route("/companydata", methods=['GET', 'POST'])
@@ -23,11 +26,15 @@ def company_data():
             companyData.ip = form.ip.data
             db.session.commit()
 
+            config_ip(form.ip.data)
+
         else:
 
             companyData = CompanyData(companyname=form.companyname.data, devicedesignation=form.devicedesignation.data, ip=form.ip.data)
             db.session.add(companyData)
             db.session.commit()
+
+            config_ip(form.ip.data)
 
     elif request.method == 'GET':
 
