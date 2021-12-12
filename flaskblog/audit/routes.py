@@ -30,14 +30,16 @@ def new_audit():
     today_audit = Audit.query.filter(
       extract('month', Audit.date_created) >= datetime.today().month,
       extract('year', Audit.date_created) >= datetime.today().year,
-      extract('day', Audit.date_created) >= datetime.today().day).all()
+      extract('day', Audit.date_created) >= datetime.today().day,
+      Audit.state == 0).all()
 
     if len(today_audit)>0:
 
         audit  = Audit.query.filter(
           extract('month', Audit.date_created) >= datetime.today().month,
           extract('year', Audit.date_created) >= datetime.today().year,
-          extract('day', Audit.date_created) >= datetime.today().day).order_by(Audit.date_created.desc()).first()
+          extract('day', Audit.date_created) >= datetime.today().day,
+          Audit.state == 0).order_by(Audit.date_created.desc()).first()
 
     else:
 
@@ -80,24 +82,33 @@ def insert_line(audit_id):
     db.session.commit()
     return "ok"
 
-@audit.route("/audit/<int:audit_id>/close")
+@audit.route("/audit/close")
 def close_audit(audit_id):
 
-    audit = Audit.query.get_or_404(audit_id)
-    if audit.state == 0:
+    audits = Audit.query.filter(
+      datetime.today().month > extract('month', Audit.date_created),
+      datetime.today().year > extract('year', Audit.date_created),
+      datetime.today().day > extract('day', Audit.date_created),
+      Audit.state == 0).all()
 
-        audit.state = 1
-        db.session.commit()
+    for audit in audits:
 
-        c = canvas.Canvas(path+audit.name)
-        textobject = c.beginText()
-        textobject.setTextOrigin(cm, 28.7*cm)
+        if audit.state == 0:
 
-        for lin in audit.line:
-            textobject.textLine(lin.string.replace("\n","").replace("\r",""))
+            print(audit.name)
 
-        ps = ParagraphStyle(textobject, leading=6)
-        c.drawText(textobject)
-        c.save()
+            audit.state = 1
+            db.session.commit()
+
+            c = canvas.Canvas(path+audit.name)
+            textobject = c.beginText()
+            textobject.setTextOrigin(cm, 28.7*cm)
+
+            for lin in audit.line:
+                textobject.textLine(lin.string.replace("\n","").replace("\r",""))
+
+            ps = ParagraphStyle(textobject, leading=6)
+            c.drawText(textobject)
+            c.save()
 
     return "ok"
