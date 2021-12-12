@@ -37,8 +37,7 @@ def new_audit():
         audit  = Audit.query.filter(
           extract('month', Audit.date_created) >= datetime.today().month,
           extract('year', Audit.date_created) >= datetime.today().year,
-          extract('day', Audit.date_created) >= datetime.today().day).
-          order_by(Audit.date_created.desc()).first()
+          extract('day', Audit.date_created) >= datetime.today().day).order_by(Audit.date_created.desc()).first()
 
     else:
 
