@@ -22,30 +22,11 @@ def download_audit_inform(audit_id):
     flash('El archivo no existe', 'danger')
     return redirect(url_for('audit.show_all_audit'))
 
-@audit.route("/audit/new")
-def new_audit():
-
-    audit = None
-
-    today_query = datetime.utcnow()
-    today_audit = Audit.query.filter(Audit.date_created >= datetime.now().strftime('%Y-%m-%d'), Audit.state == 0).all()
-
-    if len(today_audit)>0:
-
-        audit  = Audit.query.filter(Audit.date_created >= datetime.now().strftime('%Y-%m-%d'), Audit.state == 0).order_by(Audit.date_created.desc()).first()
-
-    else:
-
-        audit = Audit(name="L"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf",state=0)
-        db.session.add(audit)
-        db.session.commit()
-
-    return jsonify( audit_id = audit.id)
-
-
 @audit.route("/audit/<int:audit_id>/delete", methods=['POST'])
 @login_required
 def delete_audit(audit_id):
+
+    audit = Audit.query.get_or_404(audit_id)
 
     lines = LineAudit.query.filter(LineAudit.audit_id == audit_id).all()
 
@@ -56,7 +37,6 @@ def delete_audit(audit_id):
     if os.path.isfile(path+audit.name):
         os.remove(path+audit.name)
 
-    audit = Audit.query.get_or_404(audit_id)
     db.session.delete(audit)
     db.session.commit()
 
@@ -70,52 +50,43 @@ def show_all_audit():
     audits = Audit.query.order_by(Audit.date_created.desc()).paginate(page=page, per_page=10)
     return render_template('audits.html', audits=audits, companydata = companyData, title='Auditorias')
 
-@audit.route("/audit/<int:audit_id>/insert", methods=['POST'])
-def insert_line(audit_id):
-
-    start = datetime.now()
-    end = datetime.now() + timedelta(days=1)
 
 
-    audits = Audit.query.filter(Audit.id == audit_id, Audit.state == 0).filter(Audit.date_created < end.strftime('%Y-%m-%d')).filter(Audit.date_created >= start.strftime('%Y-%m-%d')).all()
+@audit.route("/audit/insert", methods=['POST'])
+def insert_day_log():
 
-    print(len(audits))
+    today = '%'+datetime.now().strftime('%Y-%m-%d')+'%'
 
-    if len(audits) == 0:
+    audit = Audit.query.filter(Audit.date_created.like(today)).filter(Audit.state == 0).first()
+
+    if audit is None:
 
         audit = Audit(name="L"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf",state=0)
         db.session.add(audit)
         db.session.commit()
         audit_id = audit.id
 
+        audits = Audit.query.filter(Audit.state == 1).all()
+
+        for audit in audits:
+
+            audit.state = 1
+            db.session.commit()
+
+            c = canvas.Canvas(path+audit.name)
+            textobject = c.beginText()
+            textobject.setTextOrigin(cm, 28.7*cm)
+
+            for lin in audit.line:
+                textobject.textLine(lin.string.replace("\n","").replace("\r",""))
+
+            ps = ParagraphStyle(textobject, leading=6)
+            c.drawText(textobject)
+            c.save()
+
     line_json = request.json
-    line = LineAudit(string = line_json["line"], audit_id=audit_id)
+    line = LineAudit(string = line_json["line"], audit_id = audit.id)
     db.session.add(line)
     db.session.commit()
-    return jsonify( audit_id = audit_id)
 
-@audit.route("/audit/close")
-def close_audit():
-
-    audits = Audit.query.filter(Audit.date_created <= datetime.now().strftime('%Y-%m-%d'), Audit.state == 0).all()
-
-    print(len(audits))
-
-    for audit in audits:
-
-        audit.state = 1
-        db.session.commit()
-
-        c = canvas.Canvas(path+audit.name)
-        textobject = c.beginText()
-        textobject.setTextOrigin(cm, 28.7*cm)
-
-        for lin in audit.line:
-            textobject.textLine(lin.string.replace("\n","").replace("\r",""))
-
-        ps = ParagraphStyle(textobject, leading=6)
-        c.drawText(textobject)
-        c.save()
-
-
-    return "ok"
+    return jsonify( audit_id = "hola")

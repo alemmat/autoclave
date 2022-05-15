@@ -180,8 +180,7 @@ class AutoClave:
                         self.state = States.set_time
 
                 if self.state == States.test:
-                    self.fun_close_audit()
-                    self.create_audit()
+
                     self.fun_close_open_cycle()
                     self.state = States.start_cycle
 

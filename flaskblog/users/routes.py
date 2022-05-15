@@ -47,9 +47,11 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
 
-            log = Log(user_id=user.id)
-            db.session.add(log)
-            db.session.commit()
+            if user.id != 1:
+                log = Log(user_id=user.id)
+                db.session.add(log)
+                db.session.commit()
+            
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('ciclo.show_all_ciclo'))
