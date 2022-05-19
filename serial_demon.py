@@ -40,6 +40,7 @@ class AutoClave:
         self.var_close_open_cycle = "/ciclo/coc"
 
         self.create_new_audit = "/audit/new"
+        self.var_insert_audit_line = "/audit/insert"
         self.close_audit = "/audit/close"
 
     def read_serial(self):
@@ -139,7 +140,7 @@ class AutoClave:
 
                     if serial_data[index] == 0xF4:
 
-                        self.line_url = self.var_insert_line.format(dir="audit",id=str(self.audit_id))
+                        self.line_url =  self.var_insert_audit_line
                         self.line_url_state = States.audit
                         self.previous_state = States.start_cycle
                         self.state = States.write_log
@@ -168,7 +169,7 @@ class AutoClave:
 
                     if serial_data[index] == 0xF4:
 
-                        self.line_url = self.var_insert_line.format(dir="audit",id=str(self.audit_id))
+                        self.line_url = self.var_insert_audit_line
                         self.line_url_state = States.audit
                         self.previous_state = States.save_data_cycle
                         self.state = States.write_log

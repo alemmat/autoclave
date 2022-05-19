@@ -1,6 +1,8 @@
 from flask import render_template, request, Blueprint, send_file, redirect, url_for, flash, jsonify, request
 from flask_login import login_user, current_user, logout_user, login_required
-from flaskblog.models import Audit, LineAudit, CompanyData
+from flaskblog.models.Audit import Audit
+from flaskblog.models.LineAudit import LineAudit
+from flaskblog.models.CompanyData import CompanyData
 from flaskblog import db
 from sqlalchemy import func, extract
 import os
@@ -55,13 +57,37 @@ def show_all_audit():
 @audit.route("/audit/insert", methods=['POST'])
 def insert_day_log():
 
+
+    '''audits = Audit.query.all()
+
+    for audit in audits:
+
+        lines = LineAudit.query.filter(LineAudit.audit_id == audit.id).all()
+
+        for line in lines:
+            db.session.delete(line)
+            db.session.commit()
+
+        db.session.delete(audit)
+        db.session.commit()
+
+    return jsonify( audit_id = "hola")'''
+
+
+
+
+
     today = '%'+datetime.now().strftime('%Y-%m-%d')+'%'
+
 
     audit = Audit.query.filter(Audit.date_created.like(today)).filter(Audit.state == 0).first()
 
+    print(audit)
+
+
     if audit is None:
 
-        audit = Audit(name="L"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf",state=0)
+        audit = Audit(name="L"+datetime.now().strftime('%y_%m_%d_%H:%M')+".pdf",state=0)
         db.session.add(audit)
         db.session.commit()
         audit_id = audit.id

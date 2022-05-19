@@ -1,5 +1,5 @@
 from flask import render_template, request, Blueprint, redirect, url_for
-from flaskblog.models import CompanyData
+from flaskblog.models.CompanyData import CompanyData
 from flask_login import login_user, current_user, logout_user, login_required
 
 main = Blueprint('main', __name__)

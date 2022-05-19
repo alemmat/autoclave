@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from flaskblog import db
-from flaskblog.models import CompanyData
+from flaskblog.models.CompanyData import CompanyData
 from flaskblog.companydata.forms import UpdateCompanyDataForm
 
 from flaskblog.companydata.configip import config_ip

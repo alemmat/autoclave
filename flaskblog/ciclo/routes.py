@@ -1,6 +1,8 @@
 from flask import render_template, request, Blueprint, send_file, redirect, url_for, flash, jsonify, request
 from flask_login import login_user, current_user, logout_user, login_required
-from flaskblog.models import Cycle, LineCycle, CompanyData
+from flaskblog.models.Cycle import Cycle
+from flaskblog.models.LineCycle import LineCycle
+from flaskblog.models.CompanyData import CompanyData
 from flaskblog import db
 import os
 from datetime import datetime
