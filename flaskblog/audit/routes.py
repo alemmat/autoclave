@@ -7,9 +7,7 @@ from flaskblog import db
 from sqlalchemy import func, extract
 import os
 from datetime import datetime, date, time, timedelta
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import cm
-from reportlab.lib.styles import ParagraphStyle
+from flaskblog.tasks.GeneratePdf import closeOldAudits
 
 audit = Blueprint('audit', __name__)
 
@@ -57,62 +55,13 @@ def show_all_audit():
 @audit.route("/audit/insert", methods=['POST'])
 def insert_day_log():
 
-
-    '''audits = Audit.query.all()
-
-    for audit in audits:
-
-        lines = LineAudit.query.filter(LineAudit.audit_id == audit.id).all()
-
-        for line in lines:
-            db.session.delete(line)
-            db.session.commit()
-
-        db.session.delete(audit)
-        db.session.commit()
-
-    return jsonify( audit_id = "hola")'''
-
-
-
-
-
     today = '%'+datetime.now().strftime('%Y-%m-%d')+'%'
-
 
     audit = Audit.query.filter(Audit.date_created.like(today)).filter(Audit.state == 0).first()
 
-    print(audit)
-
-
     if audit is None:
+        audit = Audit()
 
-        audit = Audit(name="L"+datetime.now().strftime('%y_%m_%d_%H:%M')+".pdf",state=0)
-        db.session.add(audit)
-        db.session.commit()
-        audit_id = audit.id
+    audit.insertAuditLine(lineString = request.json["line"])
 
-        audits = Audit.query.filter(Audit.state == 1).all()
-
-        for audit in audits:
-
-            audit.state = 1
-            db.session.commit()
-
-            c = canvas.Canvas(path+audit.name)
-            textobject = c.beginText()
-            textobject.setTextOrigin(cm, 28.7*cm)
-
-            for lin in audit.line:
-                textobject.textLine(lin.string.replace("\n","").replace("\r",""))
-
-            ps = ParagraphStyle(textobject, leading=6)
-            c.drawText(textobject)
-            c.save()
-
-    line_json = request.json
-    line = LineAudit(string = line_json["line"], audit_id = audit.id)
-    db.session.add(line)
-    db.session.commit()
-
-    return jsonify( audit_id = "hola")
+    return jsonify( audit_id = audit.id)

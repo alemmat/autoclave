@@ -5,8 +5,10 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flaskblog.config import Config
 
+
 from datetime import timedelta
 
+from celery import Celery
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -14,20 +16,24 @@ login_manager = LoginManager()
 login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
 mail = Mail()
-
+celery = Celery(__name__, broker=Config.CELERY_BROKER_URL)
 
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(Config)
     app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
-    app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(minutes=5)
+    app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(minutes=10)
     app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://{username}:{password}@{server}:3306/db_autoclave".format(username = "user", password = "123", server = "127.0.0.1")
+
 
 
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+
+    celery.conf.update(app.config)
+
 
     from flaskblog.users.routes import users
     from flaskblog.main.routes import main
