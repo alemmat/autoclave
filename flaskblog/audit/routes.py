@@ -27,18 +27,7 @@ def download_audit_inform(audit_id):
 def delete_audit(audit_id):
 
     audit = Audit.query.get_or_404(audit_id)
-
-    lines = LineAudit.query.filter(LineAudit.audit_id == audit_id).all()
-
-    for line in lines:
-        db.session.delete(line)
-        db.session.commit()
-
-    if os.path.isfile(path+audit.name):
-        os.remove(path+audit.name)
-
-    db.session.delete(audit)
-    db.session.commit()
+    audit.delete()
 
     return redirect(url_for('audit.show_all_audit'))
 

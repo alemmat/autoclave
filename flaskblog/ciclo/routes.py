@@ -29,19 +29,8 @@ def download_cycle_inform(ciclo_id):
 @login_required
 def delete_ciclo(ciclo_id):
 
-    lines = LineCycle.query.filter(LineCycle.cycle_id == ciclo_id).all()
-
-    for line in lines:
-        db.session.delete(line)
-        db.session.commit()
-
     ciclo = Cycle.query.get_or_404(ciclo_id)
-
-    if os.path.isfile(path+ciclo.name):
-        os.remove(path+ciclo.name)
-
-    db.session.delete(ciclo)
-    db.session.commit()
+    ciclo.delete()
     return redirect(url_for('ciclo.show_all_ciclo'))
 
 @ciclo.route("/ciclo")
@@ -53,21 +42,17 @@ def show_all_ciclo():
     return render_template('ciclos.html', ciclos=ciclos, companydata = companyData, title='Ciclos')
 
 @ciclo.route("/ciclo/new")
-
 def new_ciclo():
-    ciclo = Cycle(name="C"+datetime.utcnow().strftime('%y_%m_%d_%H:%M')+".pdf",state=0)
-    db.session.add(ciclo)
-    db.session.commit()
+    ciclo = Cycle()
     return jsonify( ciclo_id = ciclo.id)
 
 
 @ciclo.route("/ciclo/<int:ciclo_id>/insert", methods=['POST'])
 def insert_line(ciclo_id):
+
     ciclo = Cycle.query.get_or_404(ciclo_id)
-    line_json = request.json
-    line = LineCycle(string = line_json["line"],cycle_id=ciclo_id)
-    db.session.add(line)
-    db.session.commit()
+    ciclo.insertCycleLine(lineString = request.json["line"])
+
     return jsonify( ciclo_id = ciclo_id)
 
 
@@ -75,22 +60,7 @@ def insert_line(ciclo_id):
 def close_cycle(ciclo_id):
 
     ciclo = Cycle.query.get_or_404(ciclo_id)
-    if ciclo.state == 0:
-
-        ciclo.state = 1
-        db.session.commit()
-
-        c = canvas.Canvas(path+ciclo.name)
-        textobject = c.beginText()
-        textobject.setTextOrigin(cm, 28.7*cm)
-
-        for lin in ciclo.line:
-            textobject.textLine(lin.string.replace("\n","").replace("\r",""))
-
-        ps = ParagraphStyle(textobject, leading=6)
-        c.drawText(textobject)
-        c.save()
-
+    ciclo.genaratePdf()
     return "ok"
 
 
