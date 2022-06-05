@@ -19,8 +19,8 @@ path = '/home/jorge/autoclave/flaskblog/static/ciclos/'
 class Cycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    state = db.Column(db.Integer, nullable=False)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    state = db.Column(db.Integer, nullable=False, default = 0)
     lines = db.relationship('LineCycle', backref='cycle', lazy=True)
     temp = db.relationship('TempCycle', backref='cycle', lazy=True)
     pressure = db.relationship('PressureCycle', backref='cycle', lazy=True)

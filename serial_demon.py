@@ -16,15 +16,13 @@ class States(Enum):
     wait_time_config = auto()
     audit = auto()
     cycle = auto()
-    test = auto()
-
 
 class AutoClave:
 
     def __init__(self):
 
-        self.serial_device = serial.Serial('/dev/ttyACM0')
-        self.state = States.test
+        self.serial_device = serial.Serial('/dev/ttyUSB0')
+        self.state = States.wait_time_config
         self.line_url_state = States.audit
         self.line = ""
         self.time_byte_array = bytearray()
@@ -70,7 +68,7 @@ class AutoClave:
         minute = self.bcd_to_int( self.time_byte_array[4] ),
         seconds = self.bcd_to_int( self.time_byte_array[5] ) )
 
-        os.system('sudo date -u --set="%s"' % now)
+        os.system('sudo date --set="%s"' % now)
 
     def create_audit(self):
 
@@ -177,18 +175,13 @@ class AutoClave:
                 if self.state == States.wait_time_config:
 
                     if serial_data[index] == 0xF8:
-
                         self.state = States.set_time
-
-                if self.state == States.test:
-
-                    self.fun_close_open_cycle()
-                    self.state = States.start_cycle
 
                 if self.state == States.set_time:
 
-                    if index_time > 0:
+                    self.fun_close_open_cycle()
 
+                    if index_time > 0:
                         self.time_byte_array.append(serial_data[index])
 
                     index_time = index_time +1
@@ -198,8 +191,7 @@ class AutoClave:
                         index_time = 0
                         self.config_time()
                         time.sleep(10)
-                        self.fun_close_audit()
-                        self.create_audit()
+
                         self.state = States.start_cycle
 
                 index = index + 1

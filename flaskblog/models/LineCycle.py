@@ -8,3 +8,4 @@ class LineCycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     string = db.Column(db.String(100), nullable=False)
     cycle_id = db.Column(db.Integer, db.ForeignKey('cycle.id'), nullable=False)
+    date_created = db.Column(db.DateTime, nullable = False, default = datetime.now)
