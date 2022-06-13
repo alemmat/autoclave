@@ -189,8 +189,7 @@ class AutoClave:
                     if index_time > 6:
 
                         index_time = 0
-                        self.config_time()
-                        time.sleep(10)
+                        self.config_time()            
 
                         self.state = States.start_cycle
 

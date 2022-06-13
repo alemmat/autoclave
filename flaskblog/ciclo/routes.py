@@ -75,7 +75,7 @@ def close_open_cycle():
 
         c = canvas.Canvas(path+cycle.name)
         textobject = c.beginText()
-        textobject.setTextOrigin(cm, 28.7*cm)
+        textobject.setTextOrigin(cm, 14.35*cm)
 
         for line in cycle.lines:
             textobject.textLine(line.string.replace("\n","").replace("\r",""))
