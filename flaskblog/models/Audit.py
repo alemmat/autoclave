@@ -30,8 +30,6 @@ class Audit(db.Model):
 
     def closeAudit(self):
 
-        print("hola")
-
         self.state = 1
         db.session.commit()
 

@@ -68,7 +68,7 @@ class AutoClave:
         minute = self.bcd_to_int( self.time_byte_array[4] ),
         seconds = self.bcd_to_int( self.time_byte_array[5] ) )
 
-        os.system('sudo date --set="%s"' % now)
+        #os.system('sudo date --set="%s"' % now)
 
     def create_audit(self):
 
@@ -189,7 +189,7 @@ class AutoClave:
                     if index_time > 6:
 
                         index_time = 0
-                        self.config_time()            
+                        self.config_time()
 
                         self.state = States.start_cycle
 
