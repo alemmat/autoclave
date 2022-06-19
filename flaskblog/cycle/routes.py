@@ -10,11 +10,11 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
 from reportlab.lib.styles import ParagraphStyle
 
-ciclo = Blueprint('ciclo', __name__)
+cycle = Blueprint('cycle', __name__)
 
 path = '/home/jorge/autoclave/flaskblog/static/ciclos/'
 
-@ciclo.route("/download_cycle_inform/<int:ciclo_id>")
+@cycle.route("/download_cycle_inform/<int:ciclo_id>")
 @login_required
 def download_cycle_inform(ciclo_id):
 
@@ -25,7 +25,7 @@ def download_cycle_inform(ciclo_id):
     return redirect(url_for('ciclo.show_all_ciclo'))
 
 
-@ciclo.route("/ciclo/<int:ciclo_id>/delete", methods=['POST'])
+@cycle.route("/ciclo/<int:ciclo_id>/delete", methods=['POST'])
 @login_required
 def delete_ciclo(ciclo_id):
 
@@ -33,7 +33,7 @@ def delete_ciclo(ciclo_id):
     ciclo.delete()
     return redirect(url_for('ciclo.show_all_ciclo'))
 
-@ciclo.route("/ciclo")
+@cycle.route("/ciclo")
 @login_required
 def show_all_ciclo():
     companyData = CompanyData.query.first()
@@ -41,13 +41,13 @@ def show_all_ciclo():
     ciclos = Cycle.query.order_by(Cycle.date_created.desc()).paginate(page=page, per_page=10)
     return render_template('ciclos.html', ciclos=ciclos, companydata = companyData, title='Ciclos')
 
-@ciclo.route("/ciclo/new")
+@cycle.route("/ciclo/new")
 def new_ciclo():
     ciclo = Cycle()
     return jsonify( ciclo_id = ciclo.id)
 
 
-@ciclo.route("/ciclo/<int:ciclo_id>/insert", methods=['POST'])
+@cycle.route("/ciclo/<int:ciclo_id>/insert", methods=['POST'])
 def insert_line(ciclo_id):
 
     ciclo = Cycle.query.get_or_404(ciclo_id)
@@ -56,7 +56,7 @@ def insert_line(ciclo_id):
     return jsonify( ciclo_id = ciclo_id)
 
 
-@ciclo.route("/ciclo/<int:ciclo_id>/close")
+@cycle.route("/ciclo/<int:ciclo_id>/close")
 def close_cycle(ciclo_id):
 
     ciclo = Cycle.query.get_or_404(ciclo_id)
@@ -64,7 +64,7 @@ def close_cycle(ciclo_id):
     return "ok"
 
 
-@ciclo.route("/ciclo/coc")
+@cycle.route("/ciclo/coc")
 def close_open_cycle():
 
     cycles = Cycle.query.filter(Cycle.state == 0).all()

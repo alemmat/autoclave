@@ -45,16 +45,16 @@ class Audit(db.Model):
 
         self.closeAudit()
 
-        c = canvas.Canvas(path+self.name)
-        textobject = c.beginText()
+        pdf = canvas.Canvas(path+self.name)
+        textobject = pdf.beginText()
         textobject.setTextOrigin(cm, 28.7*cm)
 
         for line in self.lines:
             textobject.textLine(line.string.replace("\n","").replace("\r",""))
 
         ps = ParagraphStyle(textobject, leading=6)
-        c.drawText(textobject)
-        c.save()
+        pdf.drawText(textobject)
+        pdf.save()
 
 
     def delete(self):

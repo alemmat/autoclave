@@ -43,7 +43,7 @@ def login():
     companyData = CompanyData.query.first()
     session.permanent = True
     if current_user.is_authenticated:
-        return redirect(url_for('ciclo.show_all_ciclo'))
+        return redirect(url_for('cycle.show_all_ciclo'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -56,7 +56,7 @@ def login():
 
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
-            return redirect(next_page) if next_page else redirect(url_for('ciclo.show_all_ciclo'))
+            return redirect(next_page) if next_page else redirect(url_for('cycle.show_all_ciclo'))
         else:
             flash('Clave o usuario incorrecto', 'danger')
     return render_template('login.html', title='Login', form=form, companydata = companyData)
