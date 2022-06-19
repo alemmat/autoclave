@@ -60,8 +60,6 @@ class Cycle(db.Model):
         pdf.drawText(textobject)
         pdf.save()
 
-        print(pdf.width)
-
     def delete(self):
 
         if os.path.isfile(path+self.name):

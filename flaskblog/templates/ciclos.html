@@ -14,13 +14,13 @@
 
           {% if ciclo.state == 1 %}
             <td>
-              <a class="mr-2" href="{{ url_for('ciclo.download_cycle_inform', ciclo_id=ciclo.id) }}">
+              <a class="mr-2" href="{{ url_for('cycle.download_cycle_inform', ciclo_id=ciclo.id) }}">
                 {{ ciclo.name }}
               </a>
             </td>
             <td>CICLO TERMINADO</td>
             <td>
-              <button type="button" class="btn btn-danger btn-sm m-1"  onclick="callDeleteModal('{{url_for('ciclo.delete_ciclo', ciclo_id=ciclo.id) }}')">
+              <button type="button" class="btn btn-danger btn-sm m-1"  onclick="callDeleteModal('{{url_for('cycle.delete_ciclo', ciclo_id=ciclo.id) }}')">
                 Delete
               </button>
             </td>
@@ -45,9 +45,9 @@
     {% for page_num in ciclos.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
       {% if page_num %}
         {% if ciclos.page == page_num %}
-          <a class="btn btn-info mb-4" href="{{ url_for('ciclo.show_all_ciclo', page=page_num) }}">{{ page_num }}</a>
+          <a class="btn btn-info mb-4" href="{{ url_for('cycle.show_all_ciclo', page=page_num) }}">{{ page_num }}</a>
         {% else %}
-          <a class="btn btn-outline-info mb-4" href="{{ url_for('ciclo.show_all_ciclo', page=page_num) }}">{{ page_num }}</a>
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('cycle.show_all_ciclo', page=page_num) }}">{{ page_num }}</a>
         {% endif %}
       {% else %}
         ...
