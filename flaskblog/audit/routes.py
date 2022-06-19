@@ -58,7 +58,7 @@ def insert_day_log():
 
             for auditFromYesterday in auditsFromYesterday:
 
-                auditFromYesterday.genaratePdf()
+                auditFromYesterday.closeAudit()
 
     audit.insertAuditLine(lineString = request.json["line"])
 

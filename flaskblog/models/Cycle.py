@@ -8,6 +8,8 @@ from flaskblog.models.LineCycle import LineCycle
 from flaskblog.models.TempCycle import TempCycle
 from flaskblog.models.PressureCycle import PressureCycle
 
+from flaskblog.pdf.CreatePdf import CreatePdf
+
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
 from reportlab.lib.styles import ParagraphStyle
@@ -36,6 +38,12 @@ class Cycle(db.Model):
 
         self.state = 1
         db.session.commit()
+        self.generatePdf()
+
+    def closeCycleWithError(self):
+
+        self.insertCycleLine(lineString = "CICLO INTERRUMPIDO POR CORTE DE LUZ")
+        self.closeCycle()
 
 
     def insertCycleLine(self, lineString):
@@ -45,20 +53,15 @@ class Cycle(db.Model):
         db.session.commit()
 
 
-    def genaratePdf(self):
+    def generatePdf(self):
 
-        self.closeCycle()
-
-        pdf = canvas.Canvas(path+self.name)
-        textobject = pdf.beginText()
-        textobject.setTextOrigin(cm, 28.7*cm)
+        arrayLines = []
 
         for line in self.lines:
-            textobject.textLine(line.string.replace("\n","").replace("\r",""))
+            arrayLines.append(line.string)
 
-        ps = ParagraphStyle(textobject, leading=6)
-        pdf.drawText(textobject)
-        pdf.save()
+        pdf = CreatePdf(name = path+self.name, lines = arrayLines)
+
 
     def delete(self):
 

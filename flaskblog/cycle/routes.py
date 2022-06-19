@@ -60,7 +60,7 @@ def insert_line(ciclo_id):
 def close_cycle(ciclo_id):
 
     ciclo = Cycle.query.get_or_404(ciclo_id)
-    ciclo.genaratePdf()
+    ciclo.closeCycle()
     return "ok"
 
 
@@ -69,24 +69,8 @@ def close_open_cycle():
 
     cycles = Cycle.query.filter(Cycle.state == 0).all()
 
-    print(len(cycles))
-
     for cycle in cycles:
+        cycle.closeCycleWithError()
 
-        c = canvas.Canvas(path+cycle.name)
-        textobject = c.beginText()
-        textobject.setTextOrigin(cm, 14.35*cm)
-
-        for line in cycle.lines:
-            textobject.textLine(line.string.replace("\n","").replace("\r",""))
-
-        textobject.textLine("CICLO INTERRUMPIDO POR CORTE DE LUZ")
-
-        ps = ParagraphStyle(textobject, leading=6)
-        c.drawText(textobject)
-        c.save()
-
-        cycle.state = 1
-        db.session.commit()
 
     return "ok"

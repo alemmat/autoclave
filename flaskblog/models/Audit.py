@@ -5,6 +5,8 @@ from flaskblog import db, login_manager
 from flask_login import UserMixin
 from flaskblog.models.LineAudit import LineAudit
 
+from flaskblog.pdf.CreatePdf import CreatePdf
+
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
 from reportlab.lib.styles import ParagraphStyle
@@ -32,6 +34,7 @@ class Audit(db.Model):
 
         self.state = 1
         db.session.commit()
+        self.generatePdf()
 
 
     def insertAuditLine(self, lineString):
@@ -41,20 +44,14 @@ class Audit(db.Model):
         db.session.commit()
 
 
-    def genaratePdf(self):
+    def generatePdf(self):
 
-        self.closeAudit()
-
-        pdf = canvas.Canvas(path+self.name)
-        textobject = pdf.beginText()
-        textobject.setTextOrigin(cm, 28.7*cm)
+        arrayLines = []
 
         for line in self.lines:
-            textobject.textLine(line.string.replace("\n","").replace("\r",""))
+            arrayLines.append(line.string)
 
-        ps = ParagraphStyle(textobject, leading=6)
-        pdf.drawText(textobject)
-        pdf.save()
+        pdf = CreatePdf(name = path+self.name, lines = arrayLines)
 
 
     def delete(self):
