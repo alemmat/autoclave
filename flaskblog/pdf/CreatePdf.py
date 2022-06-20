@@ -7,9 +7,9 @@ class CreatePdf():
 
     def __init__(self, name, lines):
 
-        pdf = canvas.Canvas(name)
+        pdf = canvas.Canvas(name, pagesize=(10*cm,29.7*cm))
         textobject = pdf.beginText()
-        textobject.setTextOrigin(cm, 28.7*cm)
+        textobject.setTextOrigin(0.1*cm, 28.7*cm)
 
         for line in lines:
             textobject.textLine(line.replace("\n","").replace("\r",""))
