@@ -46,25 +46,28 @@ def insert_day_log():
 
     today = '%'+datetime.now().strftime('%Y-%m-%d')+'%'
     yesterday = datetime.today() - timedelta(days=1)
-    yesterday  = yesterday.strftime('%Y-%m-%d')+'%'
+    yesterday  = '%'+yesterday.strftime('%Y-%m-%d')+'%'
 
     print(today)
     print(yesterday)
 
 
     audit = Audit.query.filter(Audit.date_created.like(today)).filter(Audit.state == 0).first()
+    auditFromYesterday = Audit.query.filter(Audit.date_created.notlike(today)).filter(Audit.state == 0).all()
+    print(audit)
+    print(auditFromYesterday)
 
     if audit is None:
 
         audit = Audit()
 
-        auditFromYesterday = Audit.query.filter(Audit.date_created.notlike(yesterday)).filter(Audit.state == 0).first()
+        auditsFromYesterday = Audit.query.filter(Audit.date_created.notlike(yesterday)).filter(Audit.state == 0).all()
 
-        if audit is None:
+        if auditsFromYesterday is not None:
 
-            auditFromYesterday.genaratePdf()
+            for audit in auditsFromYesterday:
 
-
+                audit.genaratePdf()
 
     audit.insertAuditLine(lineString = request.json["line"])
 
