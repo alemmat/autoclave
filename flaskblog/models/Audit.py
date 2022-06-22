@@ -47,12 +47,12 @@ class Audit(db.Model):
 
         self.closeAudit()
 
-        c = canvas.Canvas(path+audit.name)
+        c = canvas.Canvas(path+self.name)
         textobject = c.beginText()
         textobject.setTextOrigin(cm, 28.7*cm)
 
         for line in self.lines:
-            textobject.textLine(lin.string.replace("\n","").replace("\r",""))
+            textobject.textLine(line.string.replace("\n","").replace("\r",""))
 
         ps = ParagraphStyle(textobject, leading=6)
         c.drawText(textobject)

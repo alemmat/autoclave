@@ -61,7 +61,7 @@ def insert_day_log():
 
         audit = Audit()
 
-        auditsFromYesterday = Audit.query.filter(Audit.date_created.notlike(yesterday)).filter(Audit.state == 0).all()
+        auditsFromYesterday = Audit.query.filter(Audit.date_created.notlike(today)).filter(Audit.state == 0).all()
 
         if auditsFromYesterday is not None:
 
