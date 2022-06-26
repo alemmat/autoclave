@@ -153,6 +153,12 @@ class AutoClave:
 
                 if self.state == States.save_data_cycle:
 
+                    if serial_data[index] == 0xF1:
+
+                        self.fun_close_cycle()
+                        self.create_ciclo()
+                        self.state = States.save_data_cycle
+
                     if serial_data[index] == 0xF2:
 
                         self.fun_close_cycle()
