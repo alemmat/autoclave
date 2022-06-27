@@ -26,10 +26,11 @@ class AutoClave:
 
         self.serial_device = serial.Serial('/dev/ttyUSB0')
         self.state = States.wait_time_config
+        self.lock_new_cycle_creation_state = States.lock_new_cycle_creation
         self.line_url_state = States.audit
         self.line = ""
         self.time_byte_array = bytearray()
-        self.lock_new_cycle_creation_state = lock_new_cycle_creation
+
 
 
         self.ciclo_id = 0
@@ -139,7 +140,7 @@ class AutoClave:
 
                         self.create_ciclo()
                         self.state = States.save_data_cycle
-                        self.lock_new_cycle_creation_state = lock_new_cycle_creation
+                        self.lock_new_cycle_creation_state = States.lock_new_cycle_creation
 
                     if serial_data[index] == 0xF4:
 
@@ -158,17 +159,13 @@ class AutoClave:
 
                 if self.state == States.save_data_cycle:
 
-                    if self.lock_new_cycle_creation_state == unlock_new_cycle_creation:
+                    if self.lock_new_cycle_creation_state == States.unlock_new_cycle_creation:
 
                         if serial_data[index] == 0xF1:
 
                             self.fun_close_cycle()
                             self.create_ciclo()
                             self.state = States.save_data_cycle
-
-                    else:
-
-                        self.lock_new_cycle_creation_state = unlock_new_cycle_creation
 
                     if serial_data[index] == 0xF2:
 
@@ -181,6 +178,7 @@ class AutoClave:
                         self.line_url_state = States.cycle
                         self.previous_state = States.save_data_cycle
                         self.state = States.write_log
+                        self.lock_new_cycle_creation_state = States.unlock_new_cycle_creation
 
                     if serial_data[index] == 0xF4:
 

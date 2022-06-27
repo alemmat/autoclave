@@ -7,7 +7,7 @@ class CreatePdf():
 
     def __init__(self, name, lines):
 
-        pdf = canvas.Canvas(name, pagesize=(10*cm,29.7*cm))
+        pdf = canvas.Canvas(name)
         textobject = pdf.beginText()
         textobject.setTextOrigin(0.1*cm, 28.7*cm)
 
