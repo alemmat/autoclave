@@ -16,6 +16,9 @@ class States(Enum):
     wait_time_config = auto()
     audit = auto()
     cycle = auto()
+    lock_new_cycle_creation = auto()
+    unlock_new_cycle_creation = auto()
+
 
 class AutoClave:
 
@@ -26,6 +29,7 @@ class AutoClave:
         self.line_url_state = States.audit
         self.line = ""
         self.time_byte_array = bytearray()
+        self.lock_new_cycle_creation_state = lock_new_cycle_creation
 
 
         self.ciclo_id = 0
@@ -68,7 +72,7 @@ class AutoClave:
         minute = self.bcd_to_int( self.time_byte_array[4] ),
         seconds = self.bcd_to_int( self.time_byte_array[5] ) )
 
-        os.system('sudo date --set="%s"' % now)
+        #os.system('sudo date --set="%s"' % now)
 
     def create_audit(self):
 
@@ -135,6 +139,7 @@ class AutoClave:
 
                         self.create_ciclo()
                         self.state = States.save_data_cycle
+                        self.lock_new_cycle_creation_state = lock_new_cycle_creation
 
                     if serial_data[index] == 0xF4:
 
@@ -153,11 +158,17 @@ class AutoClave:
 
                 if self.state == States.save_data_cycle:
 
-                    if serial_data[index] == 0xF1:
+                    if self.lock_new_cycle_creation_state == unlock_new_cycle_creation:
 
-                        self.fun_close_cycle()
-                        self.create_ciclo()
-                        self.state = States.save_data_cycle
+                        if serial_data[index] == 0xF1:
+
+                            self.fun_close_cycle()
+                            self.create_ciclo()
+                            self.state = States.save_data_cycle
+
+                    else:
+
+                        self.lock_new_cycle_creation_state = unlock_new_cycle_creation
 
                     if serial_data[index] == 0xF2:
 
